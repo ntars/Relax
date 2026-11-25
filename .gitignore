@@ -1,0 +1,48 @@
+# Rust
+/target/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+
+# Tauri
+/src-tauri/target/
+src-tauri/*.bin
+src-tauri/icons/
+src-tauri/tauri.conf.json
+
+# Node.js
+node_modules/
+ui/node_modules/
+ui/dist/
+ui/.vite/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+artefacts/
+*.apk
+*.dmg
+*.exe
+*.msi
+
+# Logs
+logs/
+*.log
+
+# Backup
+*.bak
+*.backup

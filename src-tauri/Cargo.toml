@@ -1,0 +1,36 @@
+[package]
+name = "relax"
+version = "0.1.0"
+description = "Relax - Family Internal System"
+authors = ["Relax Team"]
+license = "MIT"
+edition = "2021"
+
+[dependencies]
+tauri = { version = "2.1", features = ["devtools", "async-queue", "rustls-tls"] }
+tauri-plugin-window-state = "2.1"
+tauri-plugin-dialog = "2.1"
+tauri-plugin-os = "2.1"
+tauri-plugin-clipboard-manager = "2.1"
+tauri-plugin-sql = { version = "2.1", features = ["sqlite"] }
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+relax-contract = { path = "../crates/relax-contract" }
+relax-core = { path = "../crates/relax-core" }
+relax-server = { path = "../crates/relax-server" }
+relax-client = { path = "../crates/relax-client" }
+
+[build-dependencies]
+tauri-build = { version = "2.1", features = [] }
+
+[features]
+default = []
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+opt-level = 3
+lto = true
+strip = true

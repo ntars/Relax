@@ -1,0 +1,23 @@
+# Relax Contract Version Ranges
+# 由 xtask 验证，确保契约版本一致性
+
+[contract]
+min_version = "1.0.0"
+max_version = "1.x.x"
+
+[backend]
+min_version = "0.1.0"
+max_version = "0.x.x"
+
+[frontend]
+min_version = "0.1.0"
+max_version = "0.x.x"
+
+[compatibility]
+# 向后兼容的主版本
+compatible_major_versions = [0]
+
+# 契约变更日志
+changelog = [
+    { version = "1.0.0", date = "2026-11-25", description = "初始契约定义" },
+]

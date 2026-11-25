@@ -1,0 +1,110 @@
+{
+  "errors": [
+    {
+      "code": 1001,
+      "name": "AuthInvalidCredentials",
+      "http": 401,
+      "message": "用户名或密码错误",
+      "action": "请检查输入的凭证",
+      "retryable": true
+    },
+    {
+      "code": 1002,
+      "name": "AuthSessionExpired",
+      "http": 401,
+      "message": "会话已过期，请重新登录",
+      "action": "重新登录",
+      "retryable": true
+    },
+    {
+      "code": 1003,
+      "name": "AuthDeviceRevoked",
+      "http": 401,
+      "message": "设备已被撤销",
+      "action": "请重新绑定设备",
+      "retryable": false
+    },
+    {
+      "code": 1004,
+      "name": "AuthPermissionDenied",
+      "http": 403,
+      "message": "权限不足",
+      "action": "请检查当前角色权限",
+      "retryable": false
+    },
+    {
+      "code": 2001,
+      "name": "NetworkNotFound",
+      "http": 404,
+      "message": "资源不存在",
+      "action": "请检查资源是否存在",
+      "retryable": false
+    },
+    {
+      "code": 2002,
+      "name": "NetworkConflict",
+      "http": 409,
+      "message": "资源冲突",
+      "action": "请检查数据冲突",
+      "retryable": true
+    },
+    {
+      "code": 3001,
+      "name": "DatabaseConnectionFailed",
+      "http": 503,
+      "message": "数据库连接失败",
+      "action": "请检查数据库服务状态",
+      "retryable": true
+    },
+    {
+      "code": 3002,
+      "name": "DatabaseIntegrityError",
+      "http": 400,
+      "message": "数据库完整性错误",
+      "action": "请检查数据格式",
+      "retryable": false
+    },
+    {
+      "code": 3003,
+      "name": "ContractMismatch",
+      "http": 500,
+      "message": "契约版本不兼容",
+      "action": "请升级到最新版本",
+      "retryable": false
+    },
+    {
+      "code": 4001,
+      "name": "FileNotFound",
+      "http": 404,
+      "message": "文件不存在",
+      "action": "请检查文件路径",
+      "retryable": false
+    },
+    {
+      "code": 4002,
+      "name": "FileUploadFailed",
+      "http": 500,
+      "message": "文件上传失败",
+      "action": "请重试或检查网络",
+      "retryable": true
+    },
+    {
+      "code": 5001,
+      "name": "SyncFailed",
+      "http": 500,
+      "message": "同步失败",
+      "action": "请检查网络连接并重试",
+      "retryable": true
+    },
+    {
+      "code": 5002,
+      "name": "SyncCursorInvalid",
+      "http": 400,
+      "message": "同步游标无效",
+      "action": "请清除本地缓存后重新同步",
+      "retryable": false
+    }
+  ],
+  "version": "1.0.0",
+  "generated_at": "2026-11-25T00:00:00Z"
+}
