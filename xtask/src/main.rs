@@ -41,13 +41,16 @@ fn xtask_ci() -> Result<()> {
     
     // Run lint
     println!("Checking lint...");
+    println!("cargo clippy --all-targets -- -D warnings");
     
     // Run format check
     println!("Checking format...");
+    println!("cargo fmt --check");
     
     // Run tests (allow 3 SKIP)
     let mut skip_count = 0;
     println!("Running tests...");
+    println!("cargo test --all-targets");
     
     // Check UI
     xtask_check_ui()?;
@@ -65,11 +68,15 @@ fn validate_contract() -> Result<()> {
     let contract_path = PathBuf::from("contracts/error-codes.json");
     if !contract_path.exists() {
         println!("WARNING: contracts/error-codes.json not found");
+    } else {
+        println!("OK: contracts/error-codes.json exists");
     }
     
     let version_path = PathBuf::from("contracts/version-ranges.toml");
     if !version_path.exists() {
         println!("WARNING: contracts/version-ranges.toml not found");
+    } else {
+        println!("OK: contracts/version-ranges.toml exists");
     }
     
     Ok(())
@@ -119,7 +126,8 @@ fn xtask_check_version() -> Result<()> {
     let changelog_path = PathBuf::from("CHANGELOG.md");
     if !changelog_path.exists() {
         println!("WARNING: CHANGELOG.md not found");
-        return Ok(());
+    } else {
+        println!("OK: CHANGELOG.md exists");
     }
     
     Ok(())
@@ -178,6 +186,7 @@ fn generate_baseline() -> Result<()> {
 - Last updated: 2026-11-25
 "#;
     
+    std::fs::create_dir_all("artefacts")?;
     std::fs::write("artefacts/BASELINE.md", baseline_content)?;
     println!("BASELINE.md generated");
     

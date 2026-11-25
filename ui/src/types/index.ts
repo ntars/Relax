@@ -45,3 +45,10 @@ export interface Alarm {
     trigger_at: string;
     acknowledged: boolean;
 }
+
+export enum SyncState {
+    Idle,
+    Syncing,
+    Completed,
+    Failed
+}

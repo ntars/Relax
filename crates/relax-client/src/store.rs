@@ -1,4 +1,3 @@
-use crate::{OutboxRow, Change};
 use serde::{Deserialize, Serialize};
 
 pub struct Store;
@@ -43,4 +42,21 @@ pub struct NewOp {
 pub struct StoreError {
     #[allow(dead_code)]
     pub message: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OutboxRow {
+    pub id: String,
+    pub op_type: String,
+    pub payload: serde_json::Value,
+    pub status: String,
+    pub created_at: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Change {
+    pub id: String,
+    pub table: String,
+    pub action: String,
+    pub data: serde_json::Value,
 }

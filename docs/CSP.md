@@ -26,46 +26,7 @@ Content-Security-Policy:
 1. **网络请求**: `fetch()`、`XMLHttpRequest`
 2. **数据库**: `sql`、`sqlite`、`openDatabase`
 3. **加密**: `crypto`、`subtle`、`WebCrypto`
-4. **外部资源**: 仅允许 `data:` 和 `blob:` URI
-
-## 门禁实现
-
-### Rust-side Validation
-
-```rust
-// crates/relax-server/src/middleware/csp.rs
-pub fn enforce_csp(req: &Request) -> Result<(), ApiError> {
-    if req.uri().path().starts_with("/api/") {
-        return Err(ApiError::new(403, "CSP violation", "network access forbidden"));
-    }
-    Ok(())
-}
-```
-
-### TypeScript-side Guard
-
-```typescript
-// ui/src/guards/csp.ts
-export function assertCspCompliant() {
-    if (typeof fetch !== 'undefined') {
-        console.error('CSP violation: fetch() is forbidden');
-    }
-}
-```
 
 ## 允许的模式
 
-前端仅允许通过 Tauri 命令访问后端：
-
-```typescript
-// ui/src/services/api.ts
-import { invoke } from '@tauri-apps/api/tao';
-
-export async function login(username: string, password: string): Promise<AuthToken> {
-    return await invoke('login', { username, password });
-}
-```
-
-## 验证
-
-运行 `cargo xtask check-ui` 验证前端无 CSP 违规。
+前端仅允许通过 Tauri 命令访问后端。

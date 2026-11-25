@@ -1,4 +1,4 @@
-use crate::{ApiError, ClientConfig, NetError};
+use crate::{ApiClient, ApiError, ClientConfig, NetError};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 

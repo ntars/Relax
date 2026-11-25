@@ -14,7 +14,7 @@ pub async fn guard_api_endpoint(
         .and_then(|h| h.to_str().ok());
     
     match auth_header {
-        Some(token) => Ok(next.run(req).await),
+        Some(_token) => Ok(next.run(req).await),
         None => Err((StatusCode::UNAUTHORIZED, "未授权".to_string())),
     }
 }
