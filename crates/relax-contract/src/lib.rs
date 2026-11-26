@@ -10,8 +10,9 @@ use std::collections::HashMap;
 /// 角色类型
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Role {
+    OWNER,
     ADMIN,
-    PARENT,
+    MEMBER,
     CHILD,
     GUEST,
 }
@@ -28,38 +29,57 @@ pub fn has_permission(role: Role, action: &str) -> bool {
 fn get_permissions() -> HashMap<Role, Vec<&'static str>> {
     let mut map = HashMap::new();
     
-    // ADMIN: 完整权限
-    map.insert(Role::ADMIN, vec![
+    // OWNER: 完整权限
+    map.insert(Role::OWNER, vec![
         "login", "logout", "enroll", "me",
         "sync_now", "sync_status", "outbox_list", "retry_op",
-        "chat_list", "chat_send", "chat_mark_read",
-        "announcement_list", "announcement_save", "announcement_read",
-        "feed_list", "feed_save", "news_list", "news_set_state",
-        "routine_list", "routine_save",
-        "schedule_list", "schedule_save", "occurrence_list", "birthday_save",
-        "folder_list", "folder_save", "file_list",
-        "upload_start", "upload_status", "file_download", "file_delete",
-        "recycle_list", "recycle_restore",
+        "chat_list", "chat_send", "chat_mark_read", "chat_at_user",
+        "announcement_list", "announcement_save", "announcement_read", "announcement_delete",
+        "news_list", "news_set_state", "feed_list", "feed_save",
+        "routine_list", "routine_save", "routine_delete",
+        "schedule_list", "schedule_save", "schedule_delete", "occurrence_list",
+        "birthday_save", "birthdays_list",
+        "folder_list", "folder_save", "file_list", "file_delete",
+        "upload_start", "upload_status", "file_download",
+        "recycle_list", "recycle_restore", "recycle_delete",
         "photo_timeline", "album_list", "album_save", "album_add",
         "backup_now", "backup_list", "restore_preview", "doctor", "audit_list", "quota",
         "app_info", "net_type", "notify_permission", "exact_alarm_permission", "battery_permission",
-        "photo_sync_toggle",
+        "photo_sync_toggle", "revoke_device", "manage_devices",
+        "edit_system_config", "manage_members",
     ]);
     
-    // PARENT: 家长权限（除用户管理外的完整权限）
-    map.insert(Role::PARENT, vec![
+    // ADMIN: 管理员权限（除用户管理外的完整权限）
+    map.insert(Role::ADMIN, vec![
         "login", "logout", "me",
         "sync_now", "sync_status", "outbox_list", "retry_op",
-        "chat_list", "chat_send", "chat_mark_read",
-        "announcement_list", "announcement_save", "announcement_read",
-        "feed_list", "feed_save", "news_list", "news_set_state",
-        "routine_list", "routine_save",
-        "schedule_list", "schedule_save", "occurrence_list", "birthday_save",
-        "folder_list", "folder_save", "file_list",
-        "upload_start", "upload_status", "file_download", "file_delete",
-        "recycle_list", "recycle_restore",
+        "chat_list", "chat_send", "chat_mark_read", "chat_at_user",
+        "announcement_list", "announcement_save", "announcement_read", "announcement_delete",
+        "news_list", "news_set_state", "feed_list", "feed_save",
+        "routine_list", "routine_save", "routine_delete",
+        "schedule_list", "schedule_save", "schedule_delete", "occurrence_list",
+        "birthday_save", "birthdays_list",
+        "folder_list", "folder_save", "file_list", "file_delete",
+        "upload_start", "upload_status", "file_download",
+        "recycle_list", "recycle_restore", "recycle_delete",
         "photo_timeline", "album_list", "album_save", "album_add",
         "backup_now", "backup_list", "restore_preview", "doctor", "audit_list", "quota",
+        "app_info", "net_type",
+    ]);
+    
+    // MEMBER: 普通成员权限
+    map.insert(Role::MEMBER, vec![
+        "login", "logout", "me",
+        "sync_now", "sync_status", "outbox_list", "retry_op",
+        "chat_list", "chat_send", "chat_mark_read", "chat_at_user",
+        "announcement_list", "announcement_save", "announcement_read",
+        "routine_list", "routine_save",
+        "schedule_list", "schedule_save", "occurrence_list",
+        "birthday_save",
+        "folder_list", "file_list",
+        "upload_start", "upload_status", "file_download",
+        "recycle_list", "recycle_restore",
+        "photo_timeline", "album_list", "album_save", "album_add",
         "app_info", "net_type",
     ]);
     
@@ -69,8 +89,9 @@ fn get_permissions() -> HashMap<Role, Vec<&'static str>> {
         "sync_now", "sync_status", "outbox_list", "retry_op",
         "chat_list", "chat_send", "chat_mark_read",
         "announcement_list", "announcement_read",
-        "routine_list",
-        "schedule_list", "occurrence_list", "birthday_save",
+        "routine_list", "routine_save",
+        "schedule_list", "schedule_save", "occurrence_list",
+        "birthday_save",
         "folder_list", "file_list",
         "upload_start", "upload_status", "file_download",
         "photo_timeline", "album_list",
@@ -99,6 +120,6 @@ pub enum DeviceType {
 
 impl Default for DeviceType {
     fn default() -> Self {
-        DeviceType::WebBrowser
+        DeviceType::MobileAndroid
     }
 }

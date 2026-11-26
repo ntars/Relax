@@ -1,44 +1,90 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function LoginPage() {
-    const [username, setUsername] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [error, setError] = React.useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
-
+    const handleLogin = async () => {
         try {
-            await window.__tauri__.invoke('login', { username, password });
-            navigate('/dashboard');
-        } catch (err) {
-            setError('登录失败: ' + String(err));
+            const response = await fetch('/api/v1/auth', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            });
+            
+            if (response.ok) {
+                navigate('/dashboard');
+            } else {
+                alert('登录失败');
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+            alert('登录失败');
         }
     };
 
     return (
-        <div className="login-page">
-            <div className="login-card">
-                <h1>Relax 登录</h1>
-                {error && <div className="error">{error}</div>}
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        placeholder="用户名"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                    <input
-                        type="password"
-                        placeholder="密码"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <button type="submit">登录</button>
-                </form>
+        <div className="login-page" style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center',
+            minHeight: '100vh'
+        }}>
+            <div style={{ 
+                width: '300px', 
+                padding: '40px',
+                border: '1px solid #ccc', 
+                borderRadius: '8px'
+            }}>
+                <h2 style={{ textAlign: 'center' }}>Relax 登录</h2>
+                
+                <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="用户名"
+                    style={{ 
+                        width: '100%', 
+                        padding: '10px', 
+                        borderRadius: '8px',
+                        border: '1px solid #ccc',
+                        marginBottom: '10px'
+                    }}
+                />
+                
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="密码"
+                    style={{ 
+                        width: '100%', 
+                        padding: '10px', 
+                        borderRadius: '8px',
+                        border: '1px solid #ccc',
+                        marginBottom: '20px'
+                    }}
+                />
+                
+                <button
+                    onClick={handleLogin}
+                    disabled={!username || !password}
+                    style={{ 
+                        width: '100%', 
+                        padding: '10px',
+                        borderRadius: '8px',
+                        backgroundColor: username && password ? '#1976d2' : '#ccc',
+                        color: 'white',
+                        border: 'none'
+                    }}
+                >
+                    登录
+                </button>
             </div>
         </div>
     );

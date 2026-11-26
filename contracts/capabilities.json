@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-11-25T00:00:00Z",
+  "capabilities": {
+    "read_messages": ["OWNER", "ADMIN", "MEMBER", "CHILD"],
+    "read_announcements": ["OWNER", "ADMIN", "MEMBER", "CHILD"],
+    "read_news": ["OWNER", "ADMIN", "MEMBER", "CHILD"],
+    "read_routines": ["OWNER", "ADMIN", "MEMBER", "CHILD"],
+    "read_schedules": ["OWNER", "ADMIN", "MEMBER", "CHILD"],
+    "read_files": ["OWNER", "ADMIN", "MEMBER", "CHILD"],
+    "read_photos": ["OWNER", "ADMIN", "MEMBER", "CHILD"],
+    "send_messages": ["OWNER", "ADMIN", "MEMBER", "CHILD"],
+    "create_announcements": ["OWNER", "ADMIN", "MEMBER"],
+    "edit_announcements": ["OWNER", "ADMIN", "MEMBER"],
+    "delete_announcements": ["OWNER", "ADMIN"],
+    "manage_news_sources": ["OWNER", "ADMIN"],
+    "manage_routines": ["OWNER", "ADMIN"],
+    "edit_personal_routine": ["OWNER", "ADMIN", "MEMBER", "CHILD"],
+    "create_schedules": ["OWNER", "ADMIN", "MEMBER"],
+    "edit_personal_schedule": ["OWNER", "ADMIN", "MEMBER", "CHILD"],
+    "upload_files": ["OWNER", "ADMIN", "MEMBER"],
+    "delete_any_file": ["OWNER", "ADMIN"],
+    "restore_any_file": ["OWNER", "ADMIN"],
+    "clear_recycle_bin": ["OWNER", "ADMIN"],
+    "trigger_backup": ["OWNER", "ADMIN"],
+    "read_audit_log": ["OWNER"],
+    "manage_members": ["OWNER", "ADMIN"],
+    "revoke_devices": ["OWNER", "ADMIN"],
+    "edit_system_config": ["OWNER"]
+  }
+}

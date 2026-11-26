@@ -1,20 +1,29 @@
-use axum::{Router, routing::{post, get}};
+use axum::{Router, routing::post, Json};
+use serde::{Deserialize, Serialize};
 
-pub async fn login_handler() -> &'static str {
-    "login handler"
+#[derive(Debug, Deserialize)]
+pub struct LoginRequest {
+    pub username: String,
+    pub password: String,
 }
 
-pub async fn register_handler() -> &'static str {
-    "register handler"
+#[derive(Debug, Serialize)]
+pub struct LoginResponse {
+    pub success: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
 }
 
-pub async fn me_handler() -> &'static str {
-    "me handler"
+pub async fn login(_req: Json<LoginRequest>) -> Json<LoginResponse> {
+    Json(LoginResponse {
+        success: false,
+        token: None,
+        error: Some("Not implemented".to_string()),
+    })
 }
 
 pub fn router() -> Router {
-    Router::new()
-        .route("/login", post(login_handler))
-        .route("/register", post(register_handler))
-        .route("/me", get(me_handler))
+    Router::new().route("/", post(login))
 }

@@ -1,20 +1,24 @@
-use axum::{Router, routing::{get, post}};
+use axum::{Router, routing::post, Json};
+use serde::{Deserialize, Serialize};
 
-pub async fn sync_handler() -> &'static str {
-    "sync handler"
+#[derive(Debug, Deserialize)]
+pub struct SyncRequest {
+    pub cursor: Option<String>,
 }
 
-pub async fn outbox_list_handler() -> &'static str {
-    "outbox list handler"
+#[derive(Debug, Serialize)]
+pub struct SyncResponse {
+    pub changes: Vec<serde_json::Value>,
+    pub next_cursor: Option<String>,
 }
 
-pub async fn retry_outbox_handler() -> &'static str {
-    "retry outbox handler"
+pub async fn sync(_req: Json<SyncRequest>) -> Json<SyncResponse> {
+    Json(SyncResponse {
+        changes: vec![],
+        next_cursor: None,
+    })
 }
 
 pub fn router() -> Router {
-    Router::new()
-        .route("/", get(sync_handler))
-        .route("/outbox/list", get(outbox_list_handler))
-        .route("/outbox/retry", post(retry_outbox_handler))
+    Router::new().route("/", post(sync))
 }
