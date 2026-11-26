@@ -1,6 +1,7 @@
 pub mod auth;
 pub mod chat;
 pub mod sync;
+pub mod sse;
 
 use axum::{Router, routing::get};
 use crate::state::AppState;
@@ -10,7 +11,8 @@ pub fn router(state: AppState) -> Router {
         .route("/health", get(health))
         .nest("/auth", auth::router())
         .nest("/chat", chat::router())
-        .nest("/sync", sync::router());
+        .nest("/sync", sync::router())
+        .merge(sse::router());
     
     Router::new()
         .with_state(state)

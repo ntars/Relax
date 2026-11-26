@@ -27,3 +27,9 @@ custom-protocol = ["tauri/custom-protocol"]
 opt-level = 3
 lto = true
 strip = true
+
+[package.metadata.android]
+package_name = "com.relax.family"
+version_code = 1
+min_sdk_version = 24
+targets = ["aarch64-linux-android"]
