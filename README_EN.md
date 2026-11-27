@@ -21,7 +21,7 @@ A self-hosted family hub for chat, schedules, files, and photos — all data sta
 
 Family communication is scattered across several IMs, calendars, cloud drives, and photo services: messages sit on someone else's server, photos are uploaded to someone else's cloud, and schedules are kept separately. Relax fixes that by **bringing a family's chat, announcements, news, schedules, files, and photos onto one home computer**, accessed from Android clients, with data never leaving the house.
 
-**Core idea**: a single-process, single-host server (`relax serve`) owns all data and business logic; clients only render and call. Business logic lives entirely in Rust — the frontend may not make network requests, touch SQLite, or persist tokens, so "data sovereignty" is guaranteed by architecture rather than by promise.
+**Core idea**: a single-process, single-host server (`cargo run -p relax-server`) owns all data and business logic; clients only render and call. Business logic lives entirely in Rust — the frontend may not make network requests, touch SQLite, or persist tokens, so "data sovereignty" is guaranteed by architecture rather than by promise.
 
 > This repository is at **scaffold stage**: the workspace, contracts, data-model drafts, and frontend skeleton are in place, while server and client logic are still being built. This README describes the target shape and the constraints already in place; unimplemented capabilities are explicitly labeled below.
 
@@ -176,9 +176,9 @@ Planned server configuration; not implemented at scaffold stage.
 
 | Key | Type | Default | Required | Range | Purpose | Example |
 | --- | --- | --- | --- | --- | --- | --- |
-| `server.bind` | string | `127.0.0.1:8787` | No | `host:port` | Listen address | `0.0.0.0:8787` |
+| `server.bind` | string | `0.0.0.0:3000` | Hard-coded | `host:port` | Listen address |
 | `server.tls.cert` | string | self-signed path | Yes (remote) | file path | TLS certificate | `certs/server.pem` |
-| `data.dir` | string | `./data` | No | directory | Data directory | `/var/lib/relax` |
+| `data.db` | string | `data/relax.db` | Hard-coded | file path | SQLite database |
 | `backup.dir` | string | none | No | directory | Backup target | `/mnt/backup/relax` |
 | `news.interval_minutes` | integer | `60` | No | `5–1440` | News fetch interval | `30` |
 
@@ -203,7 +203,7 @@ Error codes: see `contracts/error-codes.json`, append-only.
 Example call:
 
 ```bash
-curl -s http://127.0.0.1:8787/api/v1/health
+curl -s http://127.0.0.1:3000/api/v1/health
 ```
 
 Rate limits: none on the home LAN; uploads are quota-bound.
