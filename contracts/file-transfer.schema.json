@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://relax.local/contracts/file-transfer.schema.json",
+  "title": "FileTransfer",
+  "type": "object",
+  "required": ["initRequest", "initResponse", "completeResponse"],
+  "properties": {
+    "initRequest": {
+      "type": "object",
+      "required": ["name", "size", "sha256", "mime", "folderId", "source", "capturedAt", "deviceId"],
+      "properties": {
+        "name": { "type": "string" },
+        "size": { "type": "integer", "minimum": 0 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "mime": { "type": "string" },
+        "folderId": { "oneOf": [{ "type": "null" }, { "type": "string" }] },
+        "source": { "type": "string" },
+        "capturedAt": { "type": "string", "format": "date-time" },
+        "deviceId": { "type": "string" }
+      }
+    },
+    "initResponse": {
+      "type": "object",
+      "required": ["uploadId", "chunkSize", "receivedChunks", "expiresAt"],
+      "properties": {
+        "uploadId": { "type": "string", "format": "uuid" },
+        "chunkSize": { "type": "integer", "minimum": 1 },
+        "receivedChunks": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+        "expiresAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "completeResponse": {
+      "type": "object",
+      "required": ["file"],
+      "properties": {
+        "file": { "type": "object" }
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://relax.local/contracts/report.schema.json",
+  "title": "Report",
+  "type": "object",
+  "required": ["ok", "complete", "reason", "degraded", "counts", "artifacts", "startedAt", "finishedAt", "traceId"],
+  "properties": {
+    "ok": { "type": "boolean" },
+    "complete": { "type": "boolean" },
+    "reason": { "oneOf": [{ "type": "null" }, { "type": "string" }] },
+    "degraded": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "reason", "impact", "remedy", "level"],
+        "properties": {
+          "code": { "type": "string" },
+          "reason": { "type": "string" },
+          "impact": { "type": "string" },
+          "remedy": { "type": "string" },
+          "level": { "type": "string", "enum": ["cosmetic", "functional", "integrity"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": ["files", "bytes", "entities"],
+      "properties": {
+        "files": { "type": "integer", "minimum": 0 },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "entities": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256", "bytes"],
+        "properties": {
+          "path": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "bytes": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "finishedAt": { "type": "string", "format": "date-time" },
+    "traceId": { "type": "string", "format": "uuid" }
+  },
+  "additionalProperties": false
+}

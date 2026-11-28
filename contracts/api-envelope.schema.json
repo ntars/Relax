@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://relax.local/contracts/api-envelope.schema.json",
+  "title": "APIEnvelope",
+  "type": "object",
+  "required": ["ok", "data", "error", "meta"],
+  "properties": {
+    "ok": { "type": "boolean" },
+    "data": { "nullable": true },
+    "error": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["code", "name", "message", "action", "retryable", "traceId"],
+          "properties": {
+            "code": { "type": "integer" },
+            "name": { "type": "string" },
+            "message": { "type": "string" },
+            "action": { "type": "string" },
+            "retryable": { "type": "boolean" },
+            "traceId": { "type": "string", "format": "uuid" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "meta": {
+      "type": "object",
+      "required": ["traceId", "serverTime", "contractVersion"],
+      "properties": {
+        "traceId": { "type": "string", "format": "uuid" },
+        "serverTime": { "type": "string", "format": "date-time" },
+        "contractVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

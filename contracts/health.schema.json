@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://relax.local/contracts/health.schema.json",
+  "title": "Health",
+  "type": "object",
+  "required": ["status", "version", "contractVersion", "startedAt", "checks"],
+  "properties": {
+    "status": { "type": "string", "enum": ["ok", "degraded", "down"] },
+    "version": { "type": "string" },
+    "contractVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "ok", "detail"],
+        "properties": {
+          "name": { "type": "string" },
+          "ok": { "type": "boolean" },
+          "detail": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

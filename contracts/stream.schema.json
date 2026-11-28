@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://relax.local/contracts/stream.schema.json",
+  "title": "SSEFrame",
+  "type": "object",
+  "required": ["event", "data"],
+  "properties": {
+    "event": { "type": "string", "enum": ["notification", "sync_hint", "server_shutdown"] },
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "type": { "type": "string", "enum": ["reminder", "announcement", "mention", "system"] },
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "entity": { "type": "string" },
+        "entityId": { "type": "string" },
+        "occurrenceKey": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "cursor": { "type": "string" },
+        "at": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://relax.local/contracts/app-config.schema.json",
+  "title": "AppConfig",
+  "type": "object",
+  "required": ["listen", "dataDir", "tunnelMode", "feedAllowlist", "backup"],
+  "properties": {
+    "listen": {
+      "type": "object",
+      "description": "仅允许回环地址；公网暴露由反向代理/隧道负责",
+      "required": ["host", "port"],
+      "properties": {
+        "host": { "type": "string", "enum": ["127.0.0.1", "::1", "localhost"] },
+        "port": { "type": "integer", "minimum": 1024, "maximum": 65535 }
+      },
+      "additionalProperties": false
+    },
+    "dataDir": { "type": "string", "minLength": 1 },
+    "tunnelMode": { "type": "string", "enum": ["none", "cloudflared", "frp", "tailscale"] },
+    "feedAllowlist": { "type": "array", "items": { "type": "string", "format": "uri" } },
+    "backup": {
+      "type": "object",
+      "required": ["localDir", "offsiteDir", "dailyHour"],
+      "properties": {
+        "localDir": { "type": "string", "minLength": 1 },
+        "offsiteDir": { "type": "string" },
+        "dailyHour": { "type": "integer", "minimum": 0, "maximum": 23 }
+      },
+      "additionalProperties": false
+    },
+    "secret": {
+      "type": "string",
+      "description": "仅存在于 config.local.json（0600）；备份清单只记录存在性"
+    }
+  },
+  "additionalProperties": false
+}

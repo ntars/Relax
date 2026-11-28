@@ -1,0 +1,13 @@
+[package]
+name = "relax-xtask"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "xtask"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+serde.workspace = true
+serde_json.workspace = true

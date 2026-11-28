@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-11-28T00:00:00Z",
+  "exitCodes": [
+    { "code": 0, "name": "OK", "meaning": "成功", "action": "提交/继续" },
+    { "code": 1, "name": "UNCLASSIFIED", "meaning": "未归类失败", "action": "附报告提 issue" },
+    { "code": 2, "name": "BAD_INPUT", "meaning": "参数或输入错误", "action": "看 usage" },
+    { "code": 3, "name": "NOT_IMPLEMENTED", "meaning": "能力未实现", "action": "不要重试" },
+    { "code": 4, "name": "UNSUPPORTED", "meaning": "明确不支持", "action": "换输入" },
+    { "code": 5, "name": "MISSING_DEPENDENCY", "meaning": "缺外部依赖", "action": "按提示安装" },
+    { "code": 6, "name": "BUILD_FAILED", "meaning": "构建/迁移失败", "action": "看阶段日志" },
+    { "code": 7, "name": "VALIDATION_FAILED", "meaning": "校验失败", "action": "产物不可用" },
+    { "code": 130, "name": "INTERRUPTED", "meaning": "用户中断", "action": "清理临时文件" }
+  ]
+}

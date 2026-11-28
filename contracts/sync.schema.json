@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://relax.local/contracts/sync.schema.json",
+  "title": "SyncContracts",
+  "type": "object",
+  "required": ["change", "outboxRow", "pushResult"],
+  "properties": {
+    "change": {
+      "type": "object",
+      "required": ["entity", "id", "op", "version", "updatedAt", "deleted", "payload"],
+      "properties": {
+        "entity": { "type": "string" },
+        "id": { "type": "string", "format": "uuid" },
+        "op": { "type": "string", "enum": ["upsert", "delete"] },
+        "version": { "type": "integer", "minimum": 1 },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "deleted": { "type": "boolean" },
+        "payload": { "type": "object" }
+      }
+    },
+    "outboxRow": {
+      "type": "object",
+      "required": ["opId", "entity", "op", "payload", "idempotencyKey", "createdAt", "attempts", "lastError", "status"],
+      "properties": {
+        "opId": { "type": "string", "format": "uuid" },
+        "entity": { "type": "string" },
+        "op": { "type": "string", "enum": ["upsert", "delete"] },
+        "payload": { "type": "object" },
+        "idempotencyKey": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "attempts": { "type": "integer", "minimum": 0 },
+        "lastError": { "oneOf": [{ "type": "null" }, { "type": "string" }] },
+        "status": { "type": "string", "enum": ["pending", "sending", "failed", "done"] }
+      }
+    },
+    "pushResult": {
+      "type": "object",
+      "required": ["applied", "conflicts", "cursor"],
+      "properties": {
+        "applied": { "type": "array", "items": { "type": "string" } },
+        "conflicts": { "type": "array", "items": { "type": "object" } },
+        "cursor": { "type": "string" }
+      }
+    }
+  }
+}

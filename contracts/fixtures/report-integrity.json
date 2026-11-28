@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "complete": false,
+  "reason": null,
+  "degraded": [
+    {
+      "code": "DB_SNAPSHOT_FAILED",
+      "reason": "数据库快照失败",
+      "impact": "备份不完整",
+      "remedy": "检查磁盘与权限后重试",
+      "level": "integrity"
+    }
+  ],
+  "counts": { "files": 0, "bytes": 0, "entities": 0 },
+  "artifacts": [],
+  "startedAt": "2026-11-28T00:00:00Z",
+  "finishedAt": "2026-11-28T00:00:01Z",
+  "traceId": "33333333-3333-3333-3333-333333333333"
+}

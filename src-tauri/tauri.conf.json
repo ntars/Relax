@@ -1,0 +1,9 @@
+{
+  "$schema": "https://schema.tauri.app/tauri.conf.2.1.json",
+  "build": {
+    "frontendDist": "../ui/dist"
+  },
+  "identifier": "com.relax.family",
+  "productName": "Relax",
+  "version": "0.1.0"
+}

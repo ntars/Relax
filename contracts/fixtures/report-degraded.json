@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "complete": false,
+  "reason": null,
+  "degraded": [
+    {
+      "code": "OFFSITE_SKIPPED",
+      "reason": "异地目录未配置",
+      "impact": "丢失异地副本",
+      "remedy": "配置 backup.offsiteDir",
+      "level": "functional"
+    }
+  ],
+  "counts": { "files": 1, "bytes": 128, "entities": 3 },
+  "artifacts": [{ "path": "db.sqlite.backup", "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "bytes": 128 }],
+  "startedAt": "2026-11-28T00:00:00Z",
+  "finishedAt": "2026-11-28T00:00:03Z",
+  "traceId": "22222222-2222-2222-2222-222222222222"
+}

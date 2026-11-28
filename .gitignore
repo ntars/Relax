@@ -1,14 +1,11 @@
 # Rust
 /target/
-Cargo.lock
 **/*.rs.bk
 *.pdb
 
 # Tauri
 /src-tauri/target/
 src-tauri/*.bin
-src-tauri/icons/
-src-tauri/tauri.conf.json
 
 # Node.js
 node_modules/
@@ -33,8 +30,13 @@ ui/.vite/
 .DS_Store
 Thumbs.db
 
-# Build artifacts
-artefacts/
+# Build artifacts（BASELINE.md / RELEASE-EVIDENCE.md / MANIFEST.json / SHA256SUMS 入库，二进制不入库）
+artefacts/*.apk
+artefacts/*.tar.gz
+artefacts/*.dmg
+artefacts/*.exe
+artefacts/*.msi
+artefacts/sbom.json
 *.apk
 *.dmg
 *.exe

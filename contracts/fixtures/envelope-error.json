@@ -1,0 +1,17 @@
+{
+  "ok": false,
+  "data": null,
+  "error": {
+    "code": 1006,
+    "name": "FORBIDDEN",
+    "message": "你没有执行该操作的权限",
+    "action": "联系管理员",
+    "retryable": false,
+    "traceId": "11111111-1111-1111-1111-111111111111"
+  },
+  "meta": {
+    "traceId": "11111111-1111-1111-1111-111111111111",
+    "serverTime": "2026-11-28T00:00:00Z",
+    "contractVersion": "1.0.0"
+  }
+}

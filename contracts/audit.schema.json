@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://relax.local/contracts/audit.schema.json",
+  "title": "AuditEntry",
+  "type": "object",
+  "required": ["id", "actorId", "action", "resourceType", "resourceId", "detail", "createdAt", "traceId"],
+  "properties": {
+    "id": { "type": "string", "format": "uuid" },
+    "actorId": { "type": "string", "format": "uuid" },
+    "action": { "type": "string" },
+    "resourceType": { "type": "string" },
+    "resourceId": { "type": "string" },
+    "detail": { "type": "object" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "traceId": { "type": "string", "format": "uuid" }
+  },
+  "additionalProperties": false
+}

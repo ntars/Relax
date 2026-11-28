@@ -1,0 +1,6 @@
+{
+  "version": "1.0.0",
+  "minSupportedVersion": "1.0.0",
+  "maxSupportedVersion": "1.255.255",
+  "description": "API 契约版本与兼容范围；错误码/信封/同步/报告结构变化时递增"
+}
