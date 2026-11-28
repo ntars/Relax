@@ -2,9 +2,11 @@
 //! 农历生日/纪念日（1900–2100）+ 冲突检测（时间重叠且参与者相同 → 4002）+ 软删。
 //! 失败路径对齐 7.3（LWW，低版本 2004）。
 
+pub mod birthday;
 pub mod model;
 pub mod service;
 
+pub use birthday::*;
 pub use model::*;
 pub use service::*;
 
