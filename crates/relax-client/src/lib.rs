@@ -4,6 +4,7 @@ pub mod store;
 pub mod api;
 pub mod sync;
 pub mod net;
+pub mod stream;
 
 use thiserror::Error;
 use serde::{Deserialize, Serialize};
