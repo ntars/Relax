@@ -5,6 +5,7 @@
 pub mod calendar;
 pub mod lunar;
 pub mod rrule;
+pub mod report;
 pub mod storage;
 
 // 新实现（C3.4）作为对外 API；旧 calendar/storage 保留兼容内部测试。
