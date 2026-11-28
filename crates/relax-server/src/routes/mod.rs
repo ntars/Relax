@@ -2,8 +2,10 @@ pub mod announcements;
 pub mod auth;
 pub mod birthdays;
 pub mod chat;
+pub mod devices;
 pub mod files;
 pub mod folders;
+pub mod invites;
 pub mod news;
 pub mod photos;
 pub mod routines;
@@ -23,6 +25,8 @@ pub fn router(state: AppState) -> Router {
     let api_router = Router::new()
         .route("/health", get(health))
         .nest("/auth", auth::router())
+        .nest("/devices", devices::router())
+        .nest("/invites", invites::router())
         .nest("/chat", chat::router())
         .nest("/sync", sync::router())
         .merge(sse::router())

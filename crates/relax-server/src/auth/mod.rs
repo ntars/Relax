@@ -2,6 +2,7 @@
 //! 错误码取自 contracts/error-codes.json；业务代码不写裸数字比较。
 
 pub mod crypto;
+pub mod middleware;
 pub mod password;
 pub mod service;
 pub mod store;
