@@ -11,8 +11,13 @@ pub mod schedules;
 pub mod sse;
 pub mod sync;
 
-use axum::{Router, routing::get};
-use crate::state::AppState;
+use axum::{extract::Extension, Json, Router, routing::get};
+use relax_contracts::Envelope;
+use serde_json::{json, Value};
+use crate::{
+    common::{envelope::ok_envelope, trace::TraceId},
+    state::AppState,
+};
 
 pub fn router(state: AppState) -> Router {
     let api_router = Router::new()
@@ -35,6 +40,9 @@ pub fn router(state: AppState) -> Router {
         .nest("/api/v1", api_router)
 }
 
-async fn health() -> &'static str {
-    "ok"
+async fn health(Extension(trace): Extension<TraceId>) -> Json<Envelope<Value>> {
+    Json(ok_envelope(
+        json!({ "status": "ok", "service": "relax-server" }),
+        &trace.0,
+    ))
 }

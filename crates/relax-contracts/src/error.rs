@@ -65,6 +65,7 @@ pub struct ApiError {
     pub message: String,
     pub action: String,
     pub retryable: bool,
+    #[serde(rename = "traceId")]
     pub trace_id: String,
 }
 
