@@ -36,3 +36,7 @@ rand.workspace = true
 [dev-dependencies]
 tempfile = "3.12"
 tower = { version = "0.5", features = ["util"] }
+relax-client = { path = "../relax-client" }
+rustls = { version = "0.23", default-features = false, features = ["aws-lc-rs", "std", "tls12"] }
+tokio-rustls = "0.26"
+rustls-pemfile = "2"

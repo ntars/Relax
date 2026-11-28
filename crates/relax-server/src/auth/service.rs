@@ -125,7 +125,12 @@ pub fn login(
     if device.revoked_at.is_some() || device.member_id != member_id {
         return Err(AuthError::DeviceRevoked);
     }
-    verify_totp_if_needed(conn, cfg, &member, totp_code, &now)?;
+    if let Err(totp_err) = verify_totp_if_needed(conn, cfg, &member, totp_code, &now) {
+        // 手册 6.2 / 6.6#4：失败 5 次锁 15 分钟含 TOTP 错误；锁定期内即使密码正确也 1007。
+        let lock_until = (now + Duration::minutes(cfg.lock_minutes)).to_rfc3339();
+        store::record_failure(conn, member_id, cfg.lock_threshold, &lock_until, &now_str)?;
+        return Err(totp_err);
+    }
     store::clear_failures(conn, member_id, &now_str)?;
     issue_session(conn, cfg, member_id, device_id, &member.role, &now_str)
 }

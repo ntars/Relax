@@ -129,9 +129,11 @@ pub fn revoke_device(conn: &mut Connection, id: &str, now: &str) -> Result<(), A
         params![now, now, id],
     )
     .map_err(map_db)?;
-    tx.execute("DELETE FROM sessions WHERE device_id=?1", [id])
-        .map_err(map_db)?;
-    tx.commit().map_err(map_db)
+    // 手册 6.6#3：撤销设备后旧 session token 须返回 1008（DEVICE_REVOKED），
+    // 而非删 session 导致 1001。设备维度统一拦截（authenticate/login 均查 revoked_at），
+    // 保留 session 行供审计；不在此层重复判定。
+    tx.commit()
+    .map_err(map_db)
 }
 
 /// 插入会话（token_hash 已由 token::token_hash 计算）。
