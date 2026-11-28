@@ -4,6 +4,7 @@ pub mod state;
 pub mod middleware;
 pub mod routes;
 pub mod migrate;
+pub mod cert;
 
 pub use state::{AppState, AppInfo};
 pub use routes::router;

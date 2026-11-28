@@ -49,3 +49,14 @@ logs/
 # Backup
 *.bak
 *.backup
+
+# Secrets（手册 6.7 / 9.14：私钥与含 secret 的配置绝不入库）
+config.local.json
+*.key
+*.p12
+*.pfx
+deploy/certs/
+data/
+*.db
+*.db-wal
+*.db-shm
