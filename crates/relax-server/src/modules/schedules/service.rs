@@ -87,6 +87,11 @@ pub fn parse_iso(s: &str) -> Option<NaiveDateTime> {
                 .ok()
                 .and_then(|d| d.and_hms_opt(0, 0, 0))
         })
+        .or_else(|| {
+            chrono::DateTime::parse_from_rfc3339(s)
+                .ok()
+                .map(|d| d.naive_local())
+        })
 }
 
 /// 冲突检测：时间重叠 + 参与者集合有交集 → 4002（7.3）。
