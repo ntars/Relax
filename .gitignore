@@ -49,6 +49,7 @@ logs/
 # Backup
 *.bak
 *.backup
+*.baiduyun.uploading.cfg
 
 # Secrets（手册 6.7 / 9.14：私钥与含 secret 的配置绝不入库）
 config.local.json
