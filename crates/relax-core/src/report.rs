@@ -56,6 +56,7 @@ impl Degraded {
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Counts {
     pub files: usize,
     pub bytes: usize,
@@ -71,6 +72,7 @@ pub struct Artifact {
 
 /// 完整报告（字段对齐 report.schema.json）。
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Report {
     pub ok: bool,
     pub complete: bool,

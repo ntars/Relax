@@ -90,6 +90,21 @@ fn config_is_redacted() {
 }
 
 #[test]
+fn manifest_json_uses_camelcase_keys() {
+    // 手册 3.9 / backup-manifest.schema.json 要求 camelCase 字段名。
+    let m = build_manifest(&input(true, false));
+    let v: serde_json::Value = serde_json::to_value(&m).expect("value");
+    for key in ["manifestVersion", "contractVersion", "schemaVersion", "serverVersion", "createdAt", "db", "files", "config", "report"] {
+        assert!(v.get(key).is_some(), "manifest 缺少 camelCase 字段 {}", key);
+    }
+    assert!(v.get("manifest_version").is_none(), "不应出现 snake_case");
+    let report = &v["report"];
+    for key in ["ok", "complete", "degraded", "counts", "artifacts", "startedAt", "finishedAt", "traceId"] {
+        assert!(report.get(key).is_some(), "report 缺少字段 {}", key);
+    }
+}
+
+#[test]
 fn manifest_json_roundtrip_preserves_report() {
     let m = build_manifest(&input(false, true));
     let json = serde_json::to_string(&m).expect("serialize");

@@ -27,6 +27,7 @@ pub struct DbEntry {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct FileEntry {
     pub rel_path: String,
     pub sha256: String,
@@ -43,6 +44,7 @@ pub struct ConfigEntry {
 
 /// 备份清单（对齐 contracts/backup-manifest.schema.json / 手册 3.9）。
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct BackupManifest {
     pub manifest_version: u32,
     pub contract_version: String,

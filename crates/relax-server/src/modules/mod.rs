@@ -7,6 +7,7 @@ pub mod chat;
 pub mod files;
 pub mod news;
 pub mod notifications;
+pub mod restore;
 pub mod routines;
 pub mod schedules;
 pub mod sync;
