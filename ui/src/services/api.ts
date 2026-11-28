@@ -232,3 +232,37 @@ export async function scheduleCreate(req: {
 export async function schedulePlanAlarms(): Promise<{ exactAllowed: boolean; planned: number }> {
     return invoke('schedule_plan_alarms');
 }
+
+// ---- 文件屏（C4.5）：list / upload / recycle / restore / delete ----
+
+export interface FileMeta {
+    id: string;
+    name: string;
+    size: number;
+    mime: string;
+}
+
+/** 拉取文件列表：走 Rust file_list 命令。 */
+export async function fileList(): Promise<{ items: FileMeta[] }> {
+    return invoke('file_list');
+}
+
+/** 上传文件（元数据，字节由 command 侧读本地路径）：走 Rust file_upload 命令。 */
+export async function fileUpload(name: string, size: number, mime: string): Promise<void> {
+    await invoke('file_upload', { name, size, mime });
+}
+
+/** 拉取回收站：走 Rust file_recycle_list 命令。 */
+export async function fileRecycleList(): Promise<{ items: FileMeta[] }> {
+    return invoke('file_recycle_list');
+}
+
+/** 从回收站恢复：走 Rust file_restore 命令。 */
+export async function fileRestore(id: string): Promise<void> {
+    await invoke('file_restore', { id });
+}
+
+/** 删除文件（进回收站）：走 Rust file_delete 命令。 */
+export async function fileDelete(id: string): Promise<void> {
+    await invoke('file_delete', { id });
+}

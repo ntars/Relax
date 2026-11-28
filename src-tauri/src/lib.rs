@@ -35,6 +35,11 @@ pub fn run() {
             commands::schedule_list,
             commands::schedule_create,
             commands::schedule_plan_alarms,
+            commands::file_list,
+            commands::file_upload,
+            commands::file_recycle_list,
+            commands::file_restore,
+            commands::file_delete,
         ])
         .run(tauri::generate_context!())
         .expect("error while running relax application");

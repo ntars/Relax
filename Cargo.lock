@@ -3256,6 +3256,7 @@ name = "relax-client"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "hex",
  "relax-contracts",
  "relax-core",
  "reqwest 0.12.28",
@@ -3264,6 +3265,7 @@ dependencies = [
  "rustls-pemfile",
  "serde",
  "serde_json",
+ "sha2 0.10.9",
  "tempfile",
  "thiserror 2.0.21",
  "tokio",
