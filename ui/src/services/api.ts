@@ -302,3 +302,40 @@ export async function albumCreate(name: string): Promise<void> {
 export async function albumAddFiles(albumId: string, fileIds: string[]): Promise<void> {
     await invoke('album_add_files', { albumId, fileIds });
 }
+
+// ===== C5.5 设置：回收站 + 审计只读页 =====
+
+export interface RecycleItemMeta {
+    id: string;
+    name: string;
+    recycledAt: string;
+}
+
+export interface AuditEntryMeta {
+    id: number;
+    actorId: string;
+    action: string;
+    targetType: string;
+    targetId: string;
+    createdAt: string;
+}
+
+/** 回收站列表：OWNER/ADMIN 可见。 */
+export async function recycleList(): Promise<{ items: RecycleItemMeta[] }> {
+    return invoke('recycle_list_admin');
+}
+
+/** 恢复单个文件：OWNER/ADMIN。 */
+export async function recycleRestore(id: string): Promise<void> {
+    await invoke('recycle_restore_admin', { id });
+}
+
+/** 清空回收站：仅 OWNER。 */
+export async function recycleClear(): Promise<void> {
+    await invoke('recycle_clear_admin');
+}
+
+/** 审计日志：仅 OWNER，只读。 */
+export async function auditList(): Promise<{ entries: AuditEntryMeta[] }> {
+    return invoke('audit_list');
+}

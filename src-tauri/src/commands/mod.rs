@@ -8,6 +8,7 @@ mod photos;
 mod routines;
 mod schedules;
 mod sync;
+mod admin;
 
 pub use announcements::*;
 pub use auth::*;
@@ -17,6 +18,7 @@ pub use photos::*;
 pub use news::*;
 pub use routines::*;
 pub use schedules::*;
+pub use admin::*;
 
 use serde::{Deserialize, Serialize};
 use tauri::command;
