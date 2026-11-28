@@ -24,6 +24,11 @@ fn dispatch(args: &[String]) -> Exit {
         "validate" => gates::validate_all().outcome_code(),
         "gen-ts" => gates::gen_ts(),
         "check-gen" => gates::check_gen().outcome_code(),
+        "check-docs" => gates::check_docs().outcome_code(),
+        "check-version" => gates::check_version().outcome_code(),
+        "check-ui" => gates::check_ui().outcome_code(),
+        "check-size" => gates::check_size().outcome_code(),
+        "check-no-skips" => gates::check_no_skips().outcome_code(),
         "ci" => {
             let strict = args.iter().any(|a| a == "--strict");
             gates::run_ci(strict)
@@ -33,7 +38,7 @@ fn dispatch(args: &[String]) -> Exit {
             Exit::Ok
         }
         other => {
-            eprintln!("未知子命令: {}（C0.4 阶段仅实现 validate/ci）", other);
+            eprintln!("未知子命令: {}（可用 validate/gen-ts/check-gen/check-docs/check-version/check-ui/check-size/check-no-skips/ci）", other);
             Exit::BadInput
         }
     }
@@ -44,6 +49,11 @@ fn print_usage() {
     println!("  validate          校验 13 份契约自洽");
     println!("  gen-ts            由契约生成 ui/src/gen/*.ts");
     println!("  check-gen         校验生成物未过期");
+    println!("  check-docs        校验 10 个文档数字与机器来源一致");
+    println!("  check-version     校验四处版本源一致");
+    println!("  check-ui          校验前端禁用符号/tsconfig/CSP");
+    println!("  check-size        校验质量预算（行数/函数/参数/嵌套/unsafe/allow）");
+    println!("  check-no-skips    校验无 ignore/todo/unimplemented");
     println!("  ci [--strict]     渐进式门禁编排");
     println!("退出码（contracts/exit-codes.json）:");
     for code in [0, 1, 2, 3, 4, 5, 6, 7, 130] {
@@ -63,7 +73,7 @@ impl OutcomeCode for gates::GateResult {
             gates::Outcome::Pass => Exit::Ok,
             gates::Outcome::Skip => Exit::NotImplemented,
             gates::Outcome::Fail => {
-                eprintln!("validate 失败: {}", self.detail);
+                eprintln!("门禁失败: {}", self.detail);
                 Exit::ValidationFailed
             }
         }

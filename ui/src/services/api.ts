@@ -1,9 +1,4 @@
-// 声明 Tauri 命令
-declare global {
-    interface Window {
-        __tauri__: any;
-    }
-}
+// 所有跨进程调用统一走本封装层（invoke only）。C2 起接入真实命令，当前为可编译的骨架实现。
 
 export async function login(username: string, password: string): Promise<AuthToken> {
     // return await invoke('login', { username, password });
@@ -14,6 +9,11 @@ export async function login(username: string, password: string): Promise<AuthTok
 export async function logout(): Promise<void> {
     // await invoke('logout');
     console.log('logout called');
+}
+
+export async function sendMessage(content: string): Promise<void> {
+    // await invoke('send_message', { content });
+    console.log('sendMessage called:', { content });
 }
 
 export async function me(): Promise<UserInfo> {

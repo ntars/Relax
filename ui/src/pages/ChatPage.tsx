@@ -1,27 +1,16 @@
 import React, { useState } from 'react';
+import { sendMessage } from '../services/api';
 
 export function ChatPage() {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
-    const sendMessage = async () => {
+    const submitMessage = async () => {
         if (!newMessage.trim()) return;
-        
+
         try {
-            const response = await fetch('/api/v1/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    content: newMessage,
-                    atUsers: [],
-                    replyTo: null
-                })
-            });
-            
-            if (response.ok) {
-                setNewMessage('');
-                console.log('Message sent');
-            }
+            await sendMessage(newMessage);
+            setNewMessage('');
         } catch (error) {
             console.error('Send message failed:', error);
         }
@@ -66,7 +55,7 @@ export function ChatPage() {
                     }}
                 />
                 <button
-                    onClick={sendMessage}
+                    onClick={submitMessage}
                     disabled={!newMessage.trim()}
                     style={{ 
                         padding: '10px 20px',

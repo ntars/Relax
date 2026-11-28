@@ -1,12 +1,35 @@
 //! 渐进式门禁框架。每个闸门返回 Pass / Skip / Fail，统一在 ci 编排中汇总。
 
 mod ci;
+mod docs;
 mod gen;
+mod no_skips;
+mod scan;
+mod size;
+mod ui;
 mod validate;
+mod version;
 
 pub use ci::run_ci;
+pub use docs::check_docs;
 pub use gen::{check_gen, gen_ts};
+pub use no_skips::check_no_skips;
+pub use size::check_size;
+pub use ui::check_ui;
 pub use validate::validate_all;
+pub use version::check_version;
+
+use std::path::PathBuf;
+
+/// workspace 根目录（由本 crate 的编译期清单路径上溯三级得到，与运行 cwd 无关）。
+pub(crate) fn root() -> PathBuf {
+    let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    manifest
+        .parent()
+        .and_then(|p| p.parent())
+        .map(|p| p.to_path_buf())
+        .unwrap_or(manifest)
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Outcome {

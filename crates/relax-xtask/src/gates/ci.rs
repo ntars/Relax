@@ -1,6 +1,9 @@
 //! 渐进式 ci 编排：尚未建成的闸门记 SKIP 并逐条打印；遇首个 FAIL 即停；--strict 下 SKIP 判红。
 
-use super::{check_gen, validate, GateResult, Outcome};
+use super::{
+    check_docs, check_gen, check_no_skips, check_size, check_ui, check_version, validate,
+    GateResult, Outcome,
+};
 use crate::Exit;
 
 type Gate = (&'static str, fn() -> GateResult);
@@ -11,14 +14,14 @@ pub fn run_ci(strict: bool) -> Exit {
     let mut gates: Vec<Gate> = vec![
         ("validate", validate::validate_all),
         ("check-gen", check_gen),
+        ("check-ui", check_ui),
+        ("check-version", check_version),
+        ("check-docs", check_docs),
+        ("check-size", check_size),
+        ("check-no-skips", check_no_skips),
     ];
     gates.extend([
-        ("check-ui", not_built as fn() -> GateResult),
-        ("check-version", not_built),
-        ("check-docs", not_built),
-        ("check-size", not_built),
-        ("check-no-skips", not_built),
-        ("fmt", not_built),
+        ("fmt", not_built as fn() -> GateResult),
         ("clippy", not_built),
         ("test", not_built),
     ]);

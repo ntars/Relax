@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../services/api';
 
 export function LoginPage() {
     const [username, setUsername] = useState('');
@@ -8,20 +9,8 @@ export function LoginPage() {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('/api/v1/auth', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username,
-                    password
-                })
-            });
-            
-            if (response.ok) {
-                navigate('/dashboard');
-            } else {
-                alert('登录失败');
-            }
+            await login(username, password);
+            navigate('/dashboard');
         } catch (error) {
             console.error('Login failed:', error);
             alert('登录失败');

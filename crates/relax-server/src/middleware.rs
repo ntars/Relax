@@ -1,6 +1,6 @@
 use axum::{
     body::Body,
-    http::{Request, StatusCode},
+    http::{HeaderValue, Request, StatusCode},
     middleware::Next,
     response::Response,
 };
@@ -55,7 +55,10 @@ pub async fn csp_header_middleware(
     
     response.headers_mut().insert(
         "Content-Security-Policy",
-        "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'".parse().unwrap()
+        // CSP 是编译期常量，from_static 无解析、不会 panic；connect-src 'none' 强制逻辑全在 Rust。
+        HeaderValue::from_static(
+            "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+        ),
     );
     
     response

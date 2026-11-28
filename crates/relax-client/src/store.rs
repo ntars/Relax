@@ -40,7 +40,6 @@ pub struct NewOp {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct StoreError {
-    #[allow(dead_code)]
     pub message: String,
 }
 
