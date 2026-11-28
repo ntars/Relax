@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { Announcement } from '../types';
 
 export function AnnouncementPage() {
-    const [announcements, setAnnouncements] = useState([]);
+    const [announcements] = useState<Announcement[]>([]);
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
 

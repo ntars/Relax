@@ -10,6 +10,14 @@ pub fn run() {
 
     // fail-fast: Tauri 事件循环启动失败必须立刻暴露，不能带病运行。
     tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![
+            commands::login,
+            commands::chat_send,
+            commands::chat_list,
+            commands::sync_data,
+            commands::outbox_list,
+            commands::retry_op,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running relax application");
 }

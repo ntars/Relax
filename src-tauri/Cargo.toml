@@ -1,10 +1,15 @@
 [package]
-name = "relax"
+name = "relax-app"
 version = "0.1.0"
 description = "Relax - Family Internal System"
 authors = ["Relax Team"]
 license = "MIT"
 edition = "2021"
+
+# Tauri 2 移动端要求 lib 带 _lib 后缀（手册 2.4 命名约定）
+[lib]
+name = "relax_app_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
 
 [dependencies]
 tauri = { version = "2.1", features = ["devtools", "rustls-tls"] }

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+interface FileItem { name: string; size: number; }
 
 export function FilePage() {
-    const [files, setFiles] = useState([]);
+    const [files, setFiles] = useState<FileItem[]>([]);
 
     return (
         <div className="file-page" style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>

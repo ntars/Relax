@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+interface ScheduleItem { id: string; title: string; start_time: string; created_at: string; }
 
 export function SchedulePage() {
-    const [schedules, setSchedules] = useState([]);
+    const [schedules] = useState<ScheduleItem[]>([]);
     const [newTitle, setNewTitle] = useState('');
     const [newStartTime, setNewStartTime] = useState('');
 

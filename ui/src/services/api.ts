@@ -1,26 +1,8 @@
-// 所有跨进程调用统一走本封装层（invoke only）。C2 起接入真实命令，当前为可编译的骨架实现。
-
-export async function login(username: string, password: string): Promise<AuthToken> {
-    // return await invoke('login', { username, password });
-    console.log('login called with:', { username });
-    return { token: 'mock-token', expires_at: Date.now() + 3600 * 1000 };
-}
-
-export async function logout(): Promise<void> {
-    // await invoke('logout');
-    console.log('logout called');
-}
-
-export async function sendMessage(content: string): Promise<void> {
-    // await invoke('send_message', { content });
-    console.log('sendMessage called:', { content });
-}
-
-export async function me(): Promise<UserInfo> {
-    // return await invoke('me');
-    console.log('me called');
-    return { id: 'mock-id', username: 'test', role: 'PARENT' as const };
-}
+// 所有跨进程调用统一走本封装层（invoke only）。
+// 手册 9.2 信任边界第 9 条：invoke("…") 是唯一跨进程通道，禁止 window.__TAURI__ / fetch / eval 等。
+import { invoke } from '@tauri-apps/api/core';
+import { ERROR_CODES } from '../gen/error-codes';
+import type { Role } from '../gen/capabilities';
 
 export interface AuthToken {
     token: string;
@@ -33,4 +15,44 @@ export interface UserInfo {
     role: Role;
 }
 
-export type Role = 'ADMIN' | 'PARENT' | 'CHILD' | 'GUEST';
+interface Envelope<T> {
+    success: boolean;
+    data?: T;
+    error?: string;
+}
+
+/** 登录：走 Rust login 命令，失败用契约错误码 BAD_CREDENTIALS。 */
+export async function login(username: string, password: string): Promise<AuthToken> {
+    const env = await invoke<Envelope<AuthToken>>('login', {
+        request: { username, password },
+    });
+    if (!env.success || env.data === undefined) {
+        throw new Error(ERROR_CODES[1002].message);
+    }
+    return env.data;
+}
+
+/** 发送消息：走 Rust chat_send 命令。 */
+export async function sendMessage(content: string): Promise<void> {
+    await invoke('chat_send', { message: content });
+}
+
+/** 拉取消息列表：走 Rust chat_list 命令。 */
+export async function chatList(): Promise<unknown> {
+    return invoke('chat_list');
+}
+
+/** 触发同步：走 Rust sync_data 命令。 */
+export async function syncData(): Promise<unknown> {
+    return invoke('sync_data');
+}
+
+/** 列出待发 outbox：走 Rust outbox_list 命令。 */
+export async function outboxList(): Promise<unknown> {
+    return invoke('outbox_list');
+}
+
+/** 重放单条 op：走 Rust retry_op 命令。 */
+export async function retryOp(opId: string): Promise<void> {
+    await invoke('retry_op', { opId });
+}

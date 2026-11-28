@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+interface RoutineItem { id: string; title: string; description: string; }
 
 export function RoutinePage() {
-    const [routines, setRoutines] = useState([]);
+    const [routines] = useState<RoutineItem[]>([]);
 
     return (
         <div className="routine-page" style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>

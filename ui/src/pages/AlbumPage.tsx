@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+interface PhotoItem { name: string; size: number; }
 
 export function AlbumPage() {
-    const [photos, setPhotos] = useState([]);
+    const [photos, setPhotos] = useState<PhotoItem[]>([]);
 
     return (
         <div className="album-page" style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>

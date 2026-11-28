@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+interface NewsItem { id: string; title: string; content: string; source_url: string; created_at: string; }
 
 export function NewsPage() {
-    const [newsList, setNewsList] = useState([]);
+    const [newsList] = useState<NewsItem[]>([]);
 
     return (
         <div className="news-page" style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>

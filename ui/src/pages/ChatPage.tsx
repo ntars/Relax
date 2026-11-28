@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import type { ChatMessage } from '../types';
 import { sendMessage } from '../services/api';
 
 export function ChatPage() {
-    const [messages, setMessages] = useState([]);
+    const [messages] = useState<ChatMessage[]>([]);
     const [newMessage, setNewMessage] = useState('');
 
     const submitMessage = async () => {
