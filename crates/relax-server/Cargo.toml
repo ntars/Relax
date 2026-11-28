@@ -40,3 +40,7 @@ relax-client = { path = "../relax-client" }
 rustls = { version = "0.23", default-features = false, features = ["aws-lc-rs", "std", "tls12"] }
 tokio-rustls = "0.26"
 rustls-pemfile = "2"
+
+[[bench]]
+name = "perf_bench"
+harness = false

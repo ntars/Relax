@@ -30,6 +30,12 @@ fn dispatch(args: &[String]) -> Exit {
         "check-size" => gates::check_size().outcome_code(),
         "check-no-skips" => gates::check_no_skips().outcome_code(),
         "security" => gates::run_security().outcome_code(),
+        "perf" => {
+            let only = args.iter().position(|a| a == "--only")
+                .and_then(|i| args.get(i + 1))
+                .map(|s| s.as_str());
+            gates::run_perf(only).outcome_code()
+        }
         "acceptance" => {
             let honesty = args.iter().any(|a| a == "--honesty");
             gates::run_acceptance(honesty).outcome_code()
@@ -43,7 +49,7 @@ fn dispatch(args: &[String]) -> Exit {
             Exit::Ok
         }
         other => {
-            eprintln!("未知子命令: {}（可用 validate/gen-ts/check-gen/check-docs/check-version/check-ui/check-size/check-no-skips/security/acceptance[--honesty]/ci）", other);
+            eprintln!("未知子命令: {}（可用 validate/gen-ts/check-gen/check-docs/check-version/check-ui/check-size/check-no-skips/security/perf[--only sync]/acceptance[--honesty]/ci）", other);
             Exit::BadInput
         }
     }
@@ -60,6 +66,7 @@ fn print_usage() {
     println!("  check-size        校验质量预算（行数/函数/参数/嵌套/unsafe/allow）");
     println!("  check-no-skips    校验无 ignore/todo/unimplemented");
     println!("  security          6.6 安全矩阵 11 条真打 + 真跑测试");
+    println!("  perf [--only sync]  19.1 性能预算断言 + 写 artefacts/perf.json");
     println!("  acceptance [--honesty]  跨端语义一致 + 降级留痕（--honesty 查诚实性铺满）");
     println!("  ci [--strict]     渐进式门禁编排");
     println!("退出码（contracts/exit-codes.json）:");
