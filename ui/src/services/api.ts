@@ -135,3 +135,39 @@ export async function announcementPublish(
 export async function announcementDownloadAttachment(attachmentId: string): Promise<void> {
     await invoke('announcement_download_attachment', { attachmentId });
 }
+
+// ---- 新闻屏（C4.2）：list / listFeeds / addFeed / removeFeed ----
+
+export interface NewsItem {
+    id: string;
+    title: string;
+    sourceUrl: string;
+    read: boolean;
+}
+
+export interface NewsFeed {
+    id: string;
+    title: string;
+    url: string;
+    enabled: boolean;
+}
+
+/** 拉取新闻与源列表：走 Rust news_list 命令。 */
+export async function newsList(): Promise<{ items: NewsItem[]; feeds: NewsFeed[] }> {
+    return invoke('news_list');
+}
+
+/** 新增新闻源（OWNER/ADMIN）：走 Rust news_add_feed 命令。 */
+export async function newsAddFeed(url: string, title: string): Promise<void> {
+    await invoke('news_add_feed', { url, title });
+}
+
+/** 删除新闻源（OWNER/ADMIN）：走 Rust news_remove_feed 命令。 */
+export async function newsRemoveFeed(id: string): Promise<void> {
+    await invoke('news_remove_feed', { id });
+}
+
+/** 标记新闻已读：走 Rust news_mark_read 命令。 */
+export async function newsMarkRead(id: string): Promise<void> {
+    await invoke('news_mark_read', { id });
+}
