@@ -9,6 +9,7 @@ pub mod common;
 pub mod app;
 pub mod auth;
 pub mod modules;
+pub mod realtime;
 
 pub use state::{AppState, AppInfo};
 pub use app::app;
