@@ -4,6 +4,7 @@ mod login;
 mod sync;
 
 pub use auth::*;
+pub use chat::*;
 
 use serde::{Deserialize, Serialize};
 use tauri::command;
@@ -32,9 +33,12 @@ pub async fn login(request: LoginRequest) -> Result<serde_json::Value, String> {
         .send()
         .await
         .map_err(|e| e.to_string())?;
-    
+
     if response.status().is_success() {
-        let result = response.json::<serde_json::Value>().await.map_err(|e| e.to_string())?;
+        let result = response
+            .json::<serde_json::Value>()
+            .await
+            .map_err(|e| e.to_string())?;
         Ok(serde_json::json!({
             "success": true,
             "data": result
@@ -42,45 +46,4 @@ pub async fn login(request: LoginRequest) -> Result<serde_json::Value, String> {
     } else {
         Err(format!("登录失败: {}", response.status()))
     }
-}
-
-#[command]
-pub async fn chat_send(_message: String) -> Result<serde_json::Value, String> {
-    Ok(serde_json::json!({
-        "success": true,
-        "data": {}
-    }))
-}
-
-#[command]
-pub async fn chat_list() -> Result<serde_json::Value, String> {
-    Ok(serde_json::json!({
-        "success": true,
-        "data": {
-            "messages": []
-        }
-    }))
-}
-
-#[command]
-pub async fn sync_data() -> Result<serde_json::Value, String> {
-    Ok(serde_json::json!({
-        "success": true,
-        "data": {}
-    }))
-}
-
-#[command]
-pub async fn outbox_list() -> Result<serde_json::Value, String> {
-    Ok(serde_json::json!({
-        "success": true,
-        "data": {
-            "outbox": []
-        }
-    }))
-}
-
-#[command]
-pub async fn retry_op(_op_id: String) -> Result<(), String> {
-    Ok(())
 }

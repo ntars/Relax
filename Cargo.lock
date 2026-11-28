@@ -3236,6 +3236,8 @@ checksum = "d902046e6a28a1e4c3cab97258a0ce11e994903f01c2d97a9447a0b3df85f4f6"
 name = "relax-app"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "relax-client",
  "reqwest 0.12.28",
  "serde",
  "serde_json",
@@ -3245,6 +3247,7 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
+ "uuid",
 ]
 
 [[package]]

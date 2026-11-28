@@ -147,10 +147,10 @@ impl Store {
     pub fn apply_changes(&self, changes: &[Change]) -> Result<usize, StoreError> {
         let mut applied = 0usize;
         for change in changes {
-            if self.has_pending_entity(&change.entity, &change.id)? {
+            if has_pending_entity(&self.conn, &change.entity, &change.id)? {
                 continue;
             }
-            if !self.is_newer(&change.entity, &change.id, change.version)? {
+            if !is_newer(&self.conn, &change.entity, &change.id, change.version)? {
                 continue;
             }
             let payload = serde_json::to_string(&change.payload)
@@ -179,31 +179,54 @@ impl Store {
         Ok(applied)
     }
 
-    fn has_pending_entity(&self, entity: &str, id: &str) -> Result<bool, StoreError> {
-        let found: Option<i64> = self
+    /// 手册 17.2 S0：apply_changes 与 set_cursor 必须在同一事务，避免应用一半却提交游标造成永久缺口。
+    pub fn apply_changes_and_cursor(
+        &self,
+        changes: &[Change],
+        cursor: &str,
+    ) -> Result<usize, StoreError> {
+        let tx = self
             .conn
-            .query_row(
-                "SELECT 1 FROM outbox WHERE status = 'pending' AND entity = ?1
-                 AND json_extract(payload_json, '$.id') = ?2 LIMIT 1",
-                params![entity, id],
-                |row| row.get(0),
-            )
-            .optional()
+            .unchecked_transaction()
             .map_err(|e| StoreError::Db(e.to_string()))?;
-        Ok(found.is_some())
-    }
-
-    fn is_newer(&self, entity: &str, id: &str, version: i64) -> Result<bool, StoreError> {
-        let current: Option<i64> = self
-            .conn
-            .query_row(
-                "SELECT version FROM local_changes WHERE entity = ?1 AND id = ?2",
-                params![entity, id],
-                |row| row.get(0),
+        let mut applied = 0usize;
+        for change in changes {
+            if has_pending_entity(&tx, &change.entity, &change.id)? {
+                continue;
+            }
+            if !is_newer(&tx, &change.entity, &change.id, change.version)? {
+                continue;
+            }
+            let payload = serde_json::to_string(&change.payload)
+                .map_err(|e| StoreError::Serialization(e.to_string()))?;
+            tx.execute(
+                "INSERT INTO local_changes(entity, id, op, version, updated_at, deleted, payload_json)
+                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+                 ON CONFLICT(entity, id) DO UPDATE SET
+                   op = excluded.op, version = excluded.version,
+                   updated_at = excluded.updated_at, deleted = excluded.deleted,
+                   payload_json = excluded.payload_json",
+                params![
+                    change.entity,
+                    change.id,
+                    change.op,
+                    change.version,
+                    change.updated_at,
+                    i64::from(change.deleted),
+                    payload
+                ],
             )
-            .optional()
             .map_err(|e| StoreError::Db(e.to_string()))?;
-        Ok(current.is_none_or(|v| version > v))
+            applied += 1;
+        }
+        tx.execute(
+            "INSERT INTO sync_state(key, value) VALUES ('cursor', ?1)
+             ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+            params![cursor],
+        )
+        .map_err(|e| StoreError::Db(e.to_string()))?;
+        tx.commit().map_err(|e| StoreError::Db(e.to_string()))?;
+        Ok(applied)
     }
 
     pub fn insert_alarm(&self, alarm: &AlarmRow) -> Result<(), StoreError> {
@@ -264,4 +287,31 @@ impl Store {
             .map_err(|e| StoreError::Db(e.to_string()))?;
         Ok(())
     }
+}
+
+/// 本地有 pending 实体时跳过远端覆盖（entity + payload.id）。
+fn has_pending_entity(conn: &Connection, entity: &str, id: &str) -> Result<bool, StoreError> {
+    let found: Option<i64> = conn
+        .query_row(
+            "SELECT 1 FROM outbox WHERE status = 'pending' AND entity = ?1
+             AND json_extract(payload_json, '$.id') = ?2 LIMIT 1",
+            params![entity, id],
+            |row| row.get(0),
+        )
+        .optional()
+        .map_err(|e| StoreError::Db(e.to_string()))?;
+    Ok(found.is_some())
+}
+
+/// version 大者胜；本地无记录时接受。
+fn is_newer(conn: &Connection, entity: &str, id: &str, version: i64) -> Result<bool, StoreError> {
+    let current: Option<i64> = conn
+        .query_row(
+            "SELECT version FROM local_changes WHERE entity = ?1 AND id = ?2",
+            params![entity, id],
+            |row| row.get(0),
+        )
+        .optional()
+        .map_err(|e| StoreError::Db(e.to_string()))?;
+    Ok(current.is_none_or(|v| version > v))
 }

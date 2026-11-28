@@ -20,6 +20,9 @@ thiserror.workspace = true
 tracing.workspace = true
 tracing-subscriber = { workspace = true, features = ["env-filter"] }
 reqwest.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+relax-client = { path = "../crates/relax-client" }
 
 [build-dependencies]
 tauri-build = { version = "2.1", features = [] }
