@@ -4,6 +4,7 @@ mod chat;
 mod login;
 mod news;
 mod routines;
+mod schedules;
 mod sync;
 
 pub use announcements::*;
@@ -11,6 +12,7 @@ pub use auth::*;
 pub use chat::*;
 pub use news::*;
 pub use routines::*;
+pub use schedules::*;
 
 use serde::{Deserialize, Serialize};
 use tauri::command;

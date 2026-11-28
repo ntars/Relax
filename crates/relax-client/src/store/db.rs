@@ -249,6 +249,15 @@ impl Store {
         Ok(())
     }
 
+    /// 本地 alarms 表总行数（含已触发），用于排程幂等计数。
+    pub fn alarm_count(&self) -> Result<usize, StoreError> {
+        let n: i64 = self
+            .conn
+            .query_row("SELECT COUNT(*) FROM alarms", [], |row| row.get(0))
+            .map_err(|e| StoreError::Db(e.to_string()))?;
+        Ok(n as usize)
+    }
+
     /// 取到期未触发的闹钟，按 at_utc 升序。
     pub fn due_alarms(&self, now: &str) -> Result<Vec<AlarmRow>, StoreError> {
         let mut stmt = self

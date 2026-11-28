@@ -202,3 +202,33 @@ export async function routineCreate(req: {
 }): Promise<void> {
     await invoke('routine_create', { req });
 }
+
+// ---- 日程屏（C4.4）：list / create / 闹钟排程 ----
+
+export interface ScheduleOccurrence {
+    id: string;
+    title: string;
+    startsAt: string;
+    kind: string;
+    lunar: boolean;
+}
+
+/** 拉取未来日程实例：走 Rust schedule_list 命令。 */
+export async function scheduleList(): Promise<{ items: ScheduleOccurrence[] }> {
+    return invoke('schedule_list');
+}
+
+/** 新增日程（公历或农历）：走 Rust schedule_create 命令。 */
+export async function scheduleCreate(req: {
+    title: string;
+    startsAt: string;
+    kind: string;
+    lunar: boolean;
+}): Promise<void> {
+    await invoke('schedule_create', { req });
+}
+
+/** 请求精确闹钟权限并排未来 7 天提醒：走 Rust schedule_plan_alarms 命令。 */
+export async function schedulePlanAlarms(): Promise<{ exactAllowed: boolean; planned: number }> {
+    return invoke('schedule_plan_alarms');
+}

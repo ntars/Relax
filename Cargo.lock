@@ -3257,6 +3257,7 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "relax-contracts",
+ "relax-core",
  "reqwest 0.12.28",
  "rusqlite",
  "rustls",
