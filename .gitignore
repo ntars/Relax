@@ -37,6 +37,7 @@ artefacts/*.dmg
 artefacts/*.exe
 artefacts/*.msi
 artefacts/sbom.json
+artefacts/perf-sync.json
 *.apk
 *.dmg
 *.exe
