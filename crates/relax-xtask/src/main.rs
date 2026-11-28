@@ -29,6 +29,10 @@ fn dispatch(args: &[String]) -> Exit {
         "check-ui" => gates::check_ui().outcome_code(),
         "check-size" => gates::check_size().outcome_code(),
         "check-no-skips" => gates::check_no_skips().outcome_code(),
+        "acceptance" => {
+            let honesty = args.iter().any(|a| a == "--honesty");
+            gates::run_acceptance(honesty).outcome_code()
+        }
         "ci" => {
             let strict = args.iter().any(|a| a == "--strict");
             gates::run_ci(strict)
@@ -38,7 +42,7 @@ fn dispatch(args: &[String]) -> Exit {
             Exit::Ok
         }
         other => {
-            eprintln!("未知子命令: {}（可用 validate/gen-ts/check-gen/check-docs/check-version/check-ui/check-size/check-no-skips/ci）", other);
+            eprintln!("未知子命令: {}（可用 validate/gen-ts/check-gen/check-docs/check-version/check-ui/check-size/check-no-skips/acceptance[--honesty]/ci）", other);
             Exit::BadInput
         }
     }
@@ -54,6 +58,7 @@ fn print_usage() {
     println!("  check-ui          校验前端禁用符号/tsconfig/CSP");
     println!("  check-size        校验质量预算（行数/函数/参数/嵌套/unsafe/allow）");
     println!("  check-no-skips    校验无 ignore/todo/unimplemented");
+    println!("  acceptance [--honesty]  跨端语义一致 + 降级留痕（--honesty 查诚实性铺满）");
     println!("  ci [--strict]     渐进式门禁编排");
     println!("退出码（contracts/exit-codes.json）:");
     for code in [0, 1, 2, 3, 4, 5, 6, 7, 130] {

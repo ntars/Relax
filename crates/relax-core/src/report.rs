@@ -131,6 +131,46 @@ pub fn finalize(report: &mut Report) {
     if !report.ok || report.has_integrity_gap() {
         report.complete = false;
     }
+    // 诚实性不变量（手册 2157 / 2644）：complete=false 必须有非空 degraded。
+    // 调用方只设 ok=false / reason 而未写 degraded 时自动补一条，
+    // 防止「catch 块只写日志不写 degraded」导致降级静默消失。
+    if !report.complete && report.degraded.is_empty() {
+        let reason = report
+            .reason
+            .clone()
+            .unwrap_or_else(|| "结果不完整".to_string());
+        report.degraded.push(Degraded::new(
+            "REPORT_FAILED",
+            reason,
+            "结果不完整",
+            "查看报告 reason 与日志",
+            DegradedLevel::Integrity,
+        ));
+    }
+}
+
+/// 诚实性校验：返回所有违反「complete=false ⟹ degraded 非空」及 degraded 字段不全的问题。
+/// 门禁 `acceptance --honesty` 与报告单测共用此语义。
+pub fn honesty_violations(report: &Report) -> Vec<String> {
+    let mut violations = Vec::new();
+    if !report.complete && report.degraded.is_empty() {
+        violations.push("complete=false 但 degraded 为空".to_string());
+    }
+    for d in &report.degraded {
+        if d.code.is_empty() {
+            violations.push("degraded.code 为空".to_string());
+        }
+        if d.reason.is_empty() {
+            violations.push(format!("degraded {} 的 reason 为空", d.code));
+        }
+        if d.impact.is_empty() {
+            violations.push(format!("degraded {} 的 impact 为空", d.code));
+        }
+        if d.remedy.is_empty() {
+            violations.push(format!("degraded {} 的 remedy 为空", d.code));
+        }
+    }
+    violations
 }
 
 /// UI/CLI 展示文案：complete=false 不得显示「成功」。
@@ -164,6 +204,28 @@ mod tests {
         finalize(&mut r);
         assert!(!r.complete);
         assert_eq!(display_label(&r), "失败");
+    }
+
+    #[test]
+    fn not_ok_without_degraded_gets_auto_filled() {
+        // 诚实性不变量：ok=false 却没写 degraded 的路径，finalize 自动补一条，
+        // 保证 complete=false 永远有非空 degraded（手册 2157 / 2644）。
+        let mut r = Report::new("t", "id");
+        r.ok = false;
+        r.reason = Some("disk full".into());
+        finalize(&mut r);
+        assert!(!r.complete);
+        assert!(!r.degraded.is_empty(), "complete=false 必须有 degraded");
+        assert!(honesty_violations(&r).is_empty());
+    }
+
+    #[test]
+    fn honesty_violations_detects_missing_degraded() {
+        // 绕过 finalize 直接构造：complete=false 且 degraded 空 → 被判定违规。
+        let mut r = Report::new("t", "id");
+        r.complete = false;
+        let v = honesty_violations(&r);
+        assert!(v.iter().any(|s| s.contains("complete=false 但 degraded 为空")));
     }
 
     #[test]
