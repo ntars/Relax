@@ -1,36 +1,43 @@
 //! Relax Core - 核心业务逻辑
 //!
-//! 包含农历计算、RRule 展开、文件存储路径等核心功能。
+//! 包含农历计算、RRule 展开、文件存储路径等核心功能。纯函数，无 IO。
 
 pub mod calendar;
+pub mod lunar;
+pub mod rrule;
 pub mod storage;
 
-use chrono::Datelike;
-use chrono::{NaiveDate, Utc};
-
-pub use calendar::{solar_to_lunar, lunar_to_solar};
-pub use storage::{expand_rrule, storage_rel_path, sanitize_display_name};
+// 新实现（C3.4）作为对外 API；旧 calendar/storage 保留兼容内部测试。
+pub use lunar::{LunarDate, LunarError, lunar_to_solar, solar_to_lunar};
+pub use rrule::{RRule, RuleError, expand_rrule, occurrence_key, parse_rrule};
+pub use storage::{sanitize_display_name, storage_rel_path};
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use chrono::NaiveDate;
 
     #[test]
     fn test_solar_to_lunar() {
-        // 简化测试：验证返回值结构正确
-        let lunar = solar_to_lunar(2024, 1, 1).unwrap();
-        assert_eq!(lunar.year, 2023);
-        // 月份可能因算法不同而不同，验证范围
-        assert!(lunar.month >= 1 && lunar.month <= 12);
-        assert_eq!(lunar.day, 1);
+        let lunar = solar_to_lunar(2024, 2, 10).unwrap();
+        assert_eq!((lunar.year, lunar.month, lunar.day), (2024, 1, 1));
     }
 
     #[test]
     fn test_lunar_to_solar() {
-        // 简化测试：验证返回值结构正确
-        let solar = lunar_to_solar(2023, 11, 20, false).unwrap();
-        assert_eq!(solar.year(), 2024);
-        let month = solar.month();
-        assert!(month >= 1 && month <= 12);
+        let solar = lunar_to_solar(2024, 1, 1, false).unwrap();
+        assert_eq!(solar, NaiveDate::from_ymd_opt(2024, 2, 10).unwrap());
+    }
+
+    #[test]
+    fn test_expand_rrule_api() {
+        let got = expand_rrule(
+            "FREQ=DAILY;COUNT=2",
+            NaiveDate::from_ymd_opt(2024, 1, 1).unwrap(),
+            NaiveDate::from_ymd_opt(2024, 1, 31).unwrap(),
+            10,
+        )
+        .unwrap();
+        assert_eq!(got.len(), 2);
     }
 }

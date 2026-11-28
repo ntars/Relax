@@ -5,4 +5,5 @@ pub mod chat;
 pub mod news;
 pub mod notifications;
 pub mod routines;
+pub mod schedules;
 pub mod sync;

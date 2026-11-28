@@ -44,6 +44,7 @@ chacha20poly1305 = "0.10"
 hkdf = "0.12"
 rand = "0.8"
 relax-contracts = { path = "crates/relax-contracts" }
+relax-core = { path = "crates/relax-core" }
 
 [workspace.metadata.xtask]
 version = "0.1.0"
