@@ -34,8 +34,7 @@ pub fn storage_path(file_id: &str, now: &str) -> Result<String, FileError> {
 
 /// 缩略图路径：`files/<yyyy>/<mm>/<fileId>.thumb-<size>.png`。
 pub fn thumbnail_path(storage: &str, size: u32) -> String {
-    let stem = storage.strip_suffix(".bin").unwrap_or(storage);
-    format!("{stem}.thumb-{size}.png")
+    format!("{storage}.thumb-{size}.png")
 }
 
 /// 计算文件总片数（向上取整），size=0 → 0 片。
