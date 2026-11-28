@@ -1,0 +1,20 @@
+"$schema" = "schemas/schema.json"
+
+[default]
+description = "Relax 移动插件：系统信息与通知渠道等能力，默认允许调用。"
+
+permissions = [
+    "allow-app-info",
+    "allow-network-type",
+    "allow-ensure-notification-channel",
+    "allow-request-notifications",
+    "allow-request-exact-alarm",
+    "allow-request-ignore-battery",
+    "allow-schedule-alarm",
+    "allow-cancel-alarm",
+    "allow-reschedule-all",
+    "allow-list-photos",
+    "allow-schedule-photo-sync",
+    "allow-start-sync-service",
+    "allow-stop-sync-service",
+]

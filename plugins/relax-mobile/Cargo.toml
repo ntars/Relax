@@ -1,0 +1,18 @@
+[package]
+name = "tauri-plugin-relax-mobile"
+version = "0.1.0"
+edition = "2021"
+description = "Relax 移动系统能力插件：Rust 桥 + Kotlin 原生实现"
+links = "tauri-plugin-relax-mobile"
+
+[lib]
+name = "tauri_plugin_relax_mobile"
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+tauri = "2.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[build-dependencies]
+tauri-plugin = { version = "=2.7.4", features = ["build"] }

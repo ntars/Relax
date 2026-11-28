@@ -3,6 +3,7 @@ mod state;
 
 use tracing_subscriber::EnvFilter;
 
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tracing_subscriber::fmt()
         .with_env_filter(EnvFilter::from_default_env())
@@ -10,6 +11,7 @@ pub fn run() {
 
     // fail-fast: Tauri 事件循环启动失败必须立刻暴露，不能带病运行。
     tauri::Builder::default()
+        .plugin(tauri_plugin_relax_mobile::init())
         .invoke_handler(tauri::generate_handler![
             commands::auth_enroll,
             commands::auth_login,

@@ -42,6 +42,11 @@ artefacts/sbom.json
 *.exe
 *.msi
 
+# Android 签名口令（手册 13.3：四键只在 .example 占位，真实文件 gitignore）
+src-tauri/gen/android/keystore.properties
+*.jks
+*.keystore
+
 # Logs
 logs/
 *.log

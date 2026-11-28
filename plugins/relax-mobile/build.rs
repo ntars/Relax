@@ -1,0 +1,19 @@
+fn main() {
+    tauri_plugin::Builder::new(&[
+        "app_info",
+        "network_type",
+        "ensure_notification_channel",
+        "request_notifications",
+        "request_exact_alarm",
+        "request_ignore_battery",
+        "schedule_alarm",
+        "cancel_alarm",
+        "reschedule_all",
+        "list_photos",
+        "schedule_photo_sync",
+        "start_sync_service",
+        "stop_sync_service",
+    ])
+    .android_path("android")
+    .build();
+}

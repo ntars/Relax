@@ -23,6 +23,7 @@ reqwest.workspace = true
 uuid.workspace = true
 chrono.workspace = true
 relax-client = { path = "../crates/relax-client" }
+tauri-plugin-relax-mobile = { path = "../plugins/relax-mobile" }
 
 [build-dependencies]
 tauri-build = { version = "2.1", features = [] }

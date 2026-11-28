@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-schedule-photo-sync"
+description = "Enables the schedule_photo_sync command without any pre-configured scope."
+commands.allow = ["schedule_photo_sync"]
+
+[[permission]]
+identifier = "deny-schedule-photo-sync"
+description = "Denies the schedule_photo_sync command without any pre-configured scope."
+commands.deny = ["schedule_photo_sync"]

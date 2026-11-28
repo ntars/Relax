@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-ensure-notification-channel"
+description = "Enables the ensure_notification_channel command without any pre-configured scope."
+commands.allow = ["ensure_notification_channel"]
+
+[[permission]]
+identifier = "deny-ensure-notification-channel"
+description = "Denies the ensure_notification_channel command without any pre-configured scope."
+commands.deny = ["ensure_notification_channel"]

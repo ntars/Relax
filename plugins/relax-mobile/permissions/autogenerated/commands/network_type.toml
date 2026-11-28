@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-network-type"
+description = "Enables the network_type command without any pre-configured scope."
+commands.allow = ["network_type"]
+
+[[permission]]
+identifier = "deny-network-type"
+description = "Denies the network_type command without any pre-configured scope."
+commands.deny = ["network_type"]

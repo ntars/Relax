@@ -2215,6 +2215,168 @@
           "type": "string",
           "const": "core:window:deny-unminimize",
           "markdownDescription": "Denies the unminimize command without any pre-configured scope."
+        },
+        {
+          "description": "Relax 移动插件：系统信息与通知渠道等能力，默认允许调用。\n#### This default permission set includes:\n\n- `allow-app-info`\n- `allow-network-type`\n- `allow-ensure-notification-channel`\n- `allow-request-notifications`\n- `allow-request-exact-alarm`\n- `allow-request-ignore-battery`\n- `allow-schedule-alarm`\n- `allow-cancel-alarm`\n- `allow-reschedule-all`\n- `allow-list-photos`\n- `allow-schedule-photo-sync`\n- `allow-start-sync-service`\n- `allow-stop-sync-service`",
+          "type": "string",
+          "const": "relax-mobile:default",
+          "markdownDescription": "Relax 移动插件：系统信息与通知渠道等能力，默认允许调用。\n#### This default permission set includes:\n\n- `allow-app-info`\n- `allow-network-type`\n- `allow-ensure-notification-channel`\n- `allow-request-notifications`\n- `allow-request-exact-alarm`\n- `allow-request-ignore-battery`\n- `allow-schedule-alarm`\n- `allow-cancel-alarm`\n- `allow-reschedule-all`\n- `allow-list-photos`\n- `allow-schedule-photo-sync`\n- `allow-start-sync-service`\n- `allow-stop-sync-service`"
+        },
+        {
+          "description": "Enables the app_info command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-app-info",
+          "markdownDescription": "Enables the app_info command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the cancel_alarm command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-cancel-alarm",
+          "markdownDescription": "Enables the cancel_alarm command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the ensure_notification_channel command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-ensure-notification-channel",
+          "markdownDescription": "Enables the ensure_notification_channel command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the list_photos command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-list-photos",
+          "markdownDescription": "Enables the list_photos command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the network_type command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-network-type",
+          "markdownDescription": "Enables the network_type command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the request_exact_alarm command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-request-exact-alarm",
+          "markdownDescription": "Enables the request_exact_alarm command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the request_ignore_battery command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-request-ignore-battery",
+          "markdownDescription": "Enables the request_ignore_battery command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the request_notifications command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-request-notifications",
+          "markdownDescription": "Enables the request_notifications command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the reschedule_all command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-reschedule-all",
+          "markdownDescription": "Enables the reschedule_all command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the schedule_alarm command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-schedule-alarm",
+          "markdownDescription": "Enables the schedule_alarm command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the schedule_photo_sync command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-schedule-photo-sync",
+          "markdownDescription": "Enables the schedule_photo_sync command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the start_sync_service command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-start-sync-service",
+          "markdownDescription": "Enables the start_sync_service command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the stop_sync_service command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:allow-stop-sync-service",
+          "markdownDescription": "Enables the stop_sync_service command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the app_info command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-app-info",
+          "markdownDescription": "Denies the app_info command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the cancel_alarm command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-cancel-alarm",
+          "markdownDescription": "Denies the cancel_alarm command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the ensure_notification_channel command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-ensure-notification-channel",
+          "markdownDescription": "Denies the ensure_notification_channel command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the list_photos command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-list-photos",
+          "markdownDescription": "Denies the list_photos command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the network_type command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-network-type",
+          "markdownDescription": "Denies the network_type command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the request_exact_alarm command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-request-exact-alarm",
+          "markdownDescription": "Denies the request_exact_alarm command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the request_ignore_battery command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-request-ignore-battery",
+          "markdownDescription": "Denies the request_ignore_battery command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the request_notifications command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-request-notifications",
+          "markdownDescription": "Denies the request_notifications command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the reschedule_all command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-reschedule-all",
+          "markdownDescription": "Denies the reschedule_all command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the schedule_alarm command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-schedule-alarm",
+          "markdownDescription": "Denies the schedule_alarm command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the schedule_photo_sync command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-schedule-photo-sync",
+          "markdownDescription": "Denies the schedule_photo_sync command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the start_sync_service command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-start-sync-service",
+          "markdownDescription": "Denies the start_sync_service command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the stop_sync_service command without any pre-configured scope.",
+          "type": "string",
+          "const": "relax-mobile:deny-stop-sync-service",
+          "markdownDescription": "Denies the stop_sync_service command without any pre-configured scope."
         }
       ]
     },

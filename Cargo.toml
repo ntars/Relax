@@ -6,6 +6,7 @@ members = [
     "crates/relax-server",
     "crates/relax-client",
     "crates/relax-xtask",
+    "plugins/relax-mobile",
     "src-tauri",
 ]
 default-members = [
