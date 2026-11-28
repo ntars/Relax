@@ -22,6 +22,8 @@ fn dispatch(args: &[String]) -> Exit {
     };
     match cmd.as_str() {
         "validate" => gates::validate_all().outcome_code(),
+        "gen-ts" => gates::gen_ts(),
+        "check-gen" => gates::check_gen().outcome_code(),
         "ci" => {
             let strict = args.iter().any(|a| a == "--strict");
             gates::run_ci(strict)
@@ -40,6 +42,8 @@ fn dispatch(args: &[String]) -> Exit {
 fn print_usage() {
     println!("用法: cargo xtask <命令> [选项]");
     println!("  validate          校验 13 份契约自洽");
+    println!("  gen-ts            由契约生成 ui/src/gen/*.ts");
+    println!("  check-gen         校验生成物未过期");
     println!("  ci [--strict]     渐进式门禁编排");
     println!("退出码（contracts/exit-codes.json）:");
     for code in [0, 1, 2, 3, 4, 5, 6, 7, 130] {

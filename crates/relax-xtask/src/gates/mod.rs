@@ -1,9 +1,11 @@
 //! 渐进式门禁框架。每个闸门返回 Pass / Skip / Fail，统一在 ci 编排中汇总。
 
 mod ci;
+mod gen;
 mod validate;
 
 pub use ci::run_ci;
+pub use gen::{check_gen, gen_ts};
 pub use validate::validate_all;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
