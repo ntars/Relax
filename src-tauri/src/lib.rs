@@ -40,6 +40,10 @@ pub fn run() {
             commands::file_recycle_list,
             commands::file_restore,
             commands::file_delete,
+            commands::photo_list,
+            commands::album_list,
+            commands::album_create,
+            commands::album_add_files,
         ])
         .run(tauri::generate_context!())
         .expect("error while running relax application");

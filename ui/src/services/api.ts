@@ -266,3 +266,39 @@ export async function fileRestore(id: string): Promise<void> {
 export async function fileDelete(id: string): Promise<void> {
     await invoke('file_delete', { id });
 }
+
+// ---- 相册屏（C4.5）：photos / albums ----
+
+export interface PhotoMeta {
+    id: string;
+    name: string;
+    captureTime: string;
+    mime: string;
+    fileId: string;
+}
+
+export interface AlbumMeta {
+    id: string;
+    name: string;
+    count: number;
+}
+
+/** 拉取照片时间线：走 Rust photo_list 命令。 */
+export async function photoList(): Promise<{ items: PhotoMeta[] }> {
+    return invoke('photo_list');
+}
+
+/** 拉取相册列表：走 Rust album_list 命令。 */
+export async function albumList(): Promise<{ albums: AlbumMeta[] }> {
+    return invoke('album_list');
+}
+
+/** 新建相册：走 Rust album_create 命令。 */
+export async function albumCreate(name: string): Promise<void> {
+    await invoke('album_create', { name });
+}
+
+/** 多选加入相册：走 Rust album_add_files 命令。 */
+export async function albumAddFiles(albumId: string, fileIds: string[]): Promise<void> {
+    await invoke('album_add_files', { albumId, fileIds });
+}
