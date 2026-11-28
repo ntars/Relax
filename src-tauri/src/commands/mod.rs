@@ -9,6 +9,7 @@ mod routines;
 mod schedules;
 mod sync;
 mod admin;
+mod status;
 
 pub use announcements::*;
 pub use auth::*;
@@ -19,6 +20,7 @@ pub use news::*;
 pub use routines::*;
 pub use schedules::*;
 pub use admin::*;
+pub use status::*;
 
 use serde::{Deserialize, Serialize};
 use tauri::command;

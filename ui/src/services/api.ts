@@ -339,3 +339,18 @@ export async function recycleClear(): Promise<void> {
 export async function auditList(): Promise<{ entries: AuditEntryMeta[] }> {
     return invoke('audit_list');
 }
+
+/** 服务端状态摘要（等同 relax doctor，手册 14.3 / 1284 行）。 */
+export interface ServerStatus {
+    ok: boolean;
+    complete: boolean;
+    version: string;
+    contractVersion: string;
+    certDaysRemaining: number | null;
+    degradedCount: number;
+}
+
+/** 服务端状态：失败（网络/TLS）→ 离线横幅；complete=false → 有缺口。 */
+export async function serverStatus(): Promise<ServerStatus> {
+    return invoke('server_status');
+}

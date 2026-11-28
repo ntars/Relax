@@ -48,6 +48,7 @@ pub fn run() {
             commands::recycle_restore_admin,
             commands::recycle_clear_admin,
             commands::audit_list,
+            commands::server_status,
         ])
         .run(tauri::generate_context!())
         .expect("error while running relax application");

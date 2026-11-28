@@ -9,6 +9,7 @@ pub mod common;
 pub mod app;
 pub mod auth;
 pub mod modules;
+pub mod doctor;
 pub mod realtime;
 pub mod jobs;
 

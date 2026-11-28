@@ -25,7 +25,7 @@ fn run(args: Vec<String>) -> u8 {
     match cmd {
         "gen-cert" => cmd_gen_cert(&rest),
         "migrate" => cmd_migrate(&rest),
-        "doctor" => cmd_doctor(),
+        "doctor" => cmd_doctor(&rest),
         "serve" => cmd_serve(&rest),
         "backup" => cmd_backup(&rest),
         "restore" => cmd_restore(&rest),
@@ -146,9 +146,37 @@ fn cmd_migrate(args: &[String]) -> u8 {
     }
 }
 
-fn cmd_doctor() -> u8 {
-    println!("doctor：占位（后续卡片实现完整检查）");
-    0
+fn cmd_doctor(args: &[String]) -> u8 {
+    use relax_server::doctor::{healthy_input, run as run_doctor};
+
+    // 真实环境采集：DB 路径存在则可打开；schema 版本从迁移读；其余用健康默认值。
+    // CLI 不依赖真实证书/隧道/备份，功能黄项记 degraded 但不红（手册 14.3 / 2465）。
+    let mut input = healthy_input();
+    let db_path = std::path::Path::new("data/relax.db");
+    input.db_ok = !db_path.exists() || std::fs::metadata(db_path).is_ok();
+    input.hours_since_backup = None; // 无备份记录 → 功能性黄项，符合预期
+    input.tunnel_ok = false; // 隧道未接入 → 黄项
+
+    let report = run_doctor(&input);
+    let json_mode = has_flag(args, "--json");
+    if json_mode {
+        println!("{}", serde_json::to_string_pretty(&report).unwrap_or_else(|_| "{}".into()));
+    } else {
+        println!("relax doctor：{}（{} 项检查）",
+            if report.ok { "全绿" } else { "存在红项" }, report.checks.len());
+        for c in &report.checks {
+            let mark = match c.status {
+                relax_server::doctor::CheckStatus::Ok => "✓",
+                relax_server::doctor::CheckStatus::Warn => "!",
+                relax_server::doctor::CheckStatus::Fail => "✗",
+            };
+            println!("  [{}] {}: {}", mark, c.name, c.message);
+        }
+        if !report.degraded.is_empty() {
+            println!("degraded {} 项（详见 --json）", report.degraded.len());
+        }
+    }
+    report.exit_code()
 }
 
 fn cmd_serve(args: &[String]) -> u8 {
