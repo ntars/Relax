@@ -2,6 +2,7 @@
 
 pub mod announcements;
 pub mod chat;
+pub mod files;
 pub mod news;
 pub mod notifications;
 pub mod routines;
