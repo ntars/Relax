@@ -37,6 +37,10 @@ fn dispatch(args: &[String]) -> Exit {
                 .map(|s| s.as_str());
             gates::run_perf(only).outcome_code()
         }
+        "release" => {
+            let dry_run = args.iter().any(|a| a == "--dry-run");
+            gates::run_release(dry_run).outcome_code()
+        }
         "acceptance" => {
             let honesty = args.iter().any(|a| a == "--honesty");
             gates::run_acceptance(honesty).outcome_code()
@@ -50,7 +54,7 @@ fn dispatch(args: &[String]) -> Exit {
             Exit::Ok
         }
         other => {
-            eprintln!("未知子命令: {}（可用 validate/gen-ts/check-gen/check-docs/check-version/apk-upgrade-check/check-ui/check-size/check-no-skips/security/perf[--only sync]/acceptance[--honesty]/ci）", other);
+            eprintln!("未知子命令: {}（可用 validate/gen-ts/check-gen/check-docs/check-version/apk-upgrade-check/check-ui/check-size/check-no-skips/security/perf[--only sync]/release[--dry-run]/acceptance[--honesty]/ci）", other);
             Exit::BadInput
         }
     }
@@ -69,6 +73,7 @@ fn print_usage() {
     println!("  check-no-skips    校验无 ignore/todo/unimplemented");
     println!("  security          6.6 安全矩阵 11 条真打 + 真跑测试");
     println!("  perf [--only sync]  19.1 性能预算断言 + 写 artefacts/perf.json");
+    println!("  release [--dry-run]  发布预检（launchd 三件套 + ci 复跑）");
     println!("  acceptance [--honesty]  跨端语义一致 + 降级留痕（--honesty 查诚实性铺满）");
     println!("  ci [--strict]     渐进式门禁编排");
     println!("退出码（contracts/exit-codes.json）:");

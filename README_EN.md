@@ -2,16 +2,16 @@
 
 # Relax
 
-**Description**: `悠然：面向家庭的自托管通讯与日程平台，Rust + Tauri 2 构建，数据只留在自己家里 | Relax: a self-hosted family communication and scheduling platform built with Rust and Tauri 2; data stays at home.`
+**Description**: `悠然 Relax：面向家庭的聊天、日程、相册与网盘——装在家中常开的电脑上，每位家庭成员用手机接入，消息、照片、日程与文件只存在这台电脑里，不经过任何云。 | Relax: chat, calendar, albums and file storage for the household — runs on the always-on home computer, every family member joins from a phone, nothing goes through a cloud.`
 
-**Topics**: `rust` `tauri` `self-hosted` `family` `instant-messaging` `calendar` `file-sharing` `photo-album` `sqlite` `axum` `android` `local-first` `privacy` `offline-first` `react` `typescript` `sse` `home-server` `no-cloud` `apache-license`
+**Topics**: `android` `axum` `calendar` `family` `family-chat` `file-sharing` `home-cloud` `home-server` `household` `instant-messaging` `local-first` `nas-alternative` `no-cloud` `photo-album` `privacy` `react` `rust` `self-hosted` `sqlite` `tauri`
 
 ![Status](https://img.shields.io/badge/status-scaffold-yellow?style=flat-square)
 ![Rust](https://img.shields.io/badge/rust-2021-b7410e?style=flat-square&logo=rust&logoColor=white)
 ![Tauri](https://img.shields.io/badge/tauri-2-24c8db?style=flat-square&logo=tauri&logoColor=white)
 [![License](https://img.shields.io/badge/license-Apache--2.0%20%2F%20MIT-blue?style=flat-square)](./LICENSE)
 
-A self-hosted family hub for chat, schedules, files, and photos — all data stays on your home computer.
+Chat, calendar, albums and file storage for the household: installed on the always-on computer at home, with every family member connecting from a phone; messages, photos, schedules and files are stored only on this computer, never through any cloud.
 
 [Quick Start](#quick-start) · [Features](#key-features) · [Layout](#project-layout) · [Known Issues](#known-issues-and-limitations) · [Roadmap](#roadmap) · [License](#license)
 
