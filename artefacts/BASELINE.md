@@ -111,11 +111,21 @@ aarch64-apple-darwin
 `cargo xtask ci` 全貌：validate / check-gen / check-ui / check-version / check-docs / check-size / check-no-skips 均 PASS；
 fmt / clippy / test 三个闸门记 SKIP（尚未建成，逐条打印）。按手册 9.1，M0 定基允许这 3 处 SKIP。
 
-## 7. 待人工确认（C0.10，auto=否）
+## 7. 人工确认结果（C0.10，2026-11-28）
 
-下列默认决策尚未人工签字，C0.10 之前不得进 C1.x：隧道方式、家庭所有者（OWNER）确认、备份盘、签名人。
-人工确认后在文件末尾追加一行：
+决策人在 2026-11-28 的确认中「全部采纳默认决策」，逐条锁定如下（与手册 0.4 开工假设一致）：
+
+| 决策项 | 确认结果 | 来源 |
+|---|---|---|
+| 穿透方式 | Tailscale/ZeroTier 组网优先；FRP 备选且必须 TLS | 默认采纳 |
+| 家庭所有者 | 决策人本人，角色 `OWNER` | 默认采纳 |
+| 备份目的地 | 本机外置盘 + 可选异地目录（关闭异地须记 `degraded`） | 默认采纳 |
+| 签名人 | 由决策人署名（`<name>` 待本人填写真名，模型不代填） | — |
+
+macOS 版本与芯片已实测记录于 §3：macOS 27.2.1（26B131），arm64。
+
+签字行（`<name>` 由本人替换为真实姓名后即完成 C0.10）：
 
 ```text
-SIGNED-BY: <name> <date>
+SIGNED-BY: <name> 2026-11-28
 ```
