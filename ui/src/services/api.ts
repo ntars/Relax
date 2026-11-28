@@ -9,6 +9,47 @@ export interface AuthToken {
     expires_at: number;
 }
 
+export interface EnrollRequest {
+    inviteCode: string;
+    name: string;
+    deviceId: string;
+    deviceLabel: string;
+    password: string;
+}
+
+export interface LoginRequest {
+    memberId: string;
+    password: string;
+    deviceId: string;
+    totp?: string;
+}
+
+/** 从 invoke 抛出的错误里提取错误码；无码返回 null。 */
+export function errorCodeOf(error: unknown): number | null {
+    if (error instanceof Error) {
+        const match = /^(\d{3,4}):/.exec(error.message);
+        if (match !== null && match[1] !== undefined) {
+            return Number(match[1]);
+        }
+    }
+    return null;
+}
+
+/** 入网：走 Rust auth_enroll 命令。 */
+export async function enroll(request: EnrollRequest): Promise<AuthToken> {
+    return invoke<AuthToken>('auth_enroll', { request });
+}
+
+/** 登录（含 TOTP）：走 Rust auth_login 命令。 */
+export async function loginRequest(request: LoginRequest): Promise<AuthToken> {
+    return invoke<AuthToken>('auth_login', { request });
+}
+
+/** 绑定设备：走 Rust auth_bind 命令。 */
+export async function bindDevice(deviceId: string, label: string): Promise<void> {
+    await invoke('auth_bind', { deviceId, label });
+}
+
 export interface UserInfo {
     id: string;
     username: string;

@@ -11,6 +11,9 @@ pub fn run() {
     // fail-fast: Tauri 事件循环启动失败必须立刻暴露，不能带病运行。
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
+            commands::auth_enroll,
+            commands::auth_login,
+            commands::auth_bind,
             commands::login,
             commands::chat_send,
             commands::chat_list,

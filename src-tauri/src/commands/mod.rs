@@ -1,6 +1,9 @@
+mod auth;
 mod chat;
 mod login;
 mod sync;
+
+pub use auth::*;
 
 use serde::{Deserialize, Serialize};
 use tauri::command;
