@@ -8,6 +8,7 @@ pub mod cert;
 pub mod common;
 pub mod app;
 pub mod auth;
+pub mod modules;
 
 pub use state::{AppState, AppInfo};
 pub use app::app;
