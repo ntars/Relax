@@ -23,7 +23,7 @@ pub use security::run_security;
 pub use size::check_size;
 pub use ui::check_ui;
 pub use validate::validate_all;
-pub use version::check_version;
+pub use version::{apk_upgrade_check, check_version};
 
 use std::path::PathBuf;
 

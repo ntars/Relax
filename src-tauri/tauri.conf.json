@@ -5,6 +5,13 @@
   },
   "identifier": "com.relax.family",
   "productName": "Relax",
+  "bundle": {
+    "active": true,
+    "android": {
+      "minSdkVersion": 24,
+      "versionCode": 1
+    }
+  },
   "app": {
     "security": {
       "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"

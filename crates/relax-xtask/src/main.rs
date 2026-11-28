@@ -26,6 +26,7 @@ fn dispatch(args: &[String]) -> Exit {
         "check-gen" => gates::check_gen().outcome_code(),
         "check-docs" => gates::check_docs().outcome_code(),
         "check-version" => gates::check_version().outcome_code(),
+        "apk-upgrade-check" => gates::apk_upgrade_check().outcome_code(),
         "check-ui" => gates::check_ui().outcome_code(),
         "check-size" => gates::check_size().outcome_code(),
         "check-no-skips" => gates::check_no_skips().outcome_code(),
@@ -49,7 +50,7 @@ fn dispatch(args: &[String]) -> Exit {
             Exit::Ok
         }
         other => {
-            eprintln!("未知子命令: {}（可用 validate/gen-ts/check-gen/check-docs/check-version/check-ui/check-size/check-no-skips/security/perf[--only sync]/acceptance[--honesty]/ci）", other);
+            eprintln!("未知子命令: {}（可用 validate/gen-ts/check-gen/check-docs/check-version/apk-upgrade-check/check-ui/check-size/check-no-skips/security/perf[--only sync]/acceptance[--honesty]/ci）", other);
             Exit::BadInput
         }
     }
@@ -62,6 +63,7 @@ fn print_usage() {
     println!("  check-gen         校验生成物未过期");
     println!("  check-docs        校验 10 个文档数字与机器来源一致");
     println!("  check-version     校验四处版本源一致");
+    println!("  apk-upgrade-check versionCode 单调 + 双版覆盖安装静态语义");
     println!("  check-ui          校验前端禁用符号/tsconfig/CSP");
     println!("  check-size        校验质量预算（行数/函数/参数/嵌套/unsafe/allow）");
     println!("  check-no-skips    校验无 ignore/todo/unimplemented");

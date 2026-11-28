@@ -1,10 +1,16 @@
 //! check-version：单一版本源，四处一致（手册 2.4 / 8.7）。
+//! apk_upgrade_check：versionCode 单调 + 双版覆盖安装静态语义（手册 13.3 / C6.3）。
 //! Cargo.toml [workspace.package].version / ui/package.json version /
-//! CHANGELOG.md 顶部 [x.y.z] / versionCode（Android 未建时记 SKIP 说明）。
-//! tauri.conf.json 不得写 version（继承 Cargo）。
+//! CHANGELOG.md 顶部 [x.y.z] / versionCode（tauri.conf.json → bundle.android.versionCode）。
+//! tauri.conf.json 不得写顶层 version（继承 Cargo）。
 
 use super::{root, GateResult};
 use std::fs;
+
+/// 上一次已发布 APK 的 versionCode（0 = 尚未发布任何 APK）。
+/// 手册 13.1：versionCode 单调递增；发布新 APK 后必须把本常量更新为已发布号，
+/// 否则下次门禁会以「未递增」判红——这是单调性的机器真相源。
+const LAST_RELEASED_VERSION_CODE: u64 = 0;
 
 pub fn check_version() -> GateResult {
     let cargo = read_cargo_version();
@@ -31,7 +37,7 @@ pub fn check_version() -> GateResult {
 
     if problems.is_empty() {
         GateResult::pass(format!(
-            "版本源一致 = {}；tauri.conf 无 version；versionCode 待 C6 Android 引入",
+            "版本源一致 = {}；tauri.conf 无顶层 version；versionCode 已由 apk-upgrade-check 单独校验",
             cargo.unwrap_or_default()
         ))
     } else {
@@ -102,6 +108,91 @@ fn read_tauri_version() -> Option<String> {
     Some(value[..end].to_string())
 }
 
+/// C6.3：versionCode 单调 + 双版覆盖安装静态语义（手册 13.1 / 13.3）。
+/// 真机双版覆盖安装属 E3，静态门禁只验「覆盖安装的必要条件齐备」，不伪造真机结果。
+pub fn apk_upgrade_check() -> GateResult {
+    let mut problems = Vec::new();
+
+    match read_version_code() {
+        Some(code) if code > LAST_RELEASED_VERSION_CODE => {
+            // 单调递增：当前必须大于上一发布号（0=首版）。
+        }
+        Some(code) => problems.push(format!(
+            "versionCode={code} 未递增（上一发布={LAST_RELEASED_VERSION_CODE}，必须更大）"
+        )),
+        None => problems.push("tauri.conf.json 缺 bundle.android.versionCode 或非正整数".into()),
+    }
+    if let Err(e) = check_coverage_semantics() {
+        problems.push(e);
+    }
+
+    if problems.is_empty() {
+        GateResult::pass(format!(
+            "versionCode={} 单调递增（上版={}）；双版覆盖安装静态语义齐备；真机覆盖安装需 E3 演练",
+            read_version_code().unwrap_or(0), LAST_RELEASED_VERSION_CODE
+        ))
+    } else {
+        GateResult::fail(format!("APK 升级门禁未通过:\n  {}", problems.join("\n  ")))
+    }
+}
+
+/// 从 tauri.conf.json 读 bundle.android.versionCode（正整数）。
+fn read_version_code() -> Option<u64> {
+    let text = fs::read_to_string(root().join("src-tauri/tauri.conf.json")).ok()?;
+    let pos = text.find("\"versionCode\"")? + "\"versionCode\"".len();
+    let rest = &text[pos..];
+    let colon = rest.find(':')?;
+    let value: String = rest[colon + 1..]
+        .trim_start()
+        .trim_start_matches(|c: char| c.is_ascii_digit() == false && c != '-')
+        .chars()
+        .take_while(|c| c.is_ascii_digit())
+        .collect();
+    value.parse().ok().filter(|n: &u64| *n > 0)
+}
+
+/// 双版覆盖安装必要条件：同包名、release 签名、缺 keystore fail、四键占位、密钥未入库。
+fn check_coverage_semantics() -> Result<String, String> {
+    let gradle = fs::read_to_string(root().join("src-tauri/gen/android/app/build.gradle.kts"))
+        .map_err(|e| format!("读 build.gradle.kts 失败: {e}"))?;
+    let example = fs::read_to_string(root().join("src-tauri/gen/android/keystore.properties.example"))
+        .map_err(|e| format!("读 keystore.properties.example 失败: {e}"))?;
+    let tauri = fs::read_to_string(root().join("src-tauri/tauri.conf.json"))
+        .map_err(|e| format!("读 tauri.conf.json 失败: {e}"))?;
+    let gitignore = fs::read_to_string(root().join(".gitignore")).unwrap_or_default();
+
+    let mut missing: Vec<String> = Vec::new();
+    // 同包名：覆盖安装的前提是 applicationId 不变。
+    if !tauri.contains("\"com.relax.family\"")
+        || !gradle.contains("applicationId = \"com.relax.family\"")
+        || !gradle.contains("namespace = \"com.relax.family\"") {
+        missing.push("identifier / applicationId / namespace 不一致".into());
+    }
+    for token in [
+        "signingConfigs.getByName(\"release\")", // release 必须签名
+        "require(!isReleaseBuild || keystorePropsFile.exists())", // 缺文件 fail
+        "getProperty(\"storeFile\")", "getProperty(\"storePassword\")",
+        "getProperty(\"keyAlias\")", "getProperty(\"keyPassword\")",
+    ] {
+        if !gradle.contains(token) {
+            missing.push(format!("build.gradle.kts 缺 {token}"));
+        }
+    }
+    for key in ["storeFile", "storePassword", "keyAlias", "keyPassword"] {
+        if !example.contains(key) {
+            missing.push(format!("keystore.properties.example 缺 {key}"));
+        }
+    }
+    if !gitignore.contains("keystore.properties") {
+        missing.push(".gitignore 未忽略 keystore.properties（四键可能入库）".into());
+    }
+    if missing.is_empty() {
+        Ok("双版覆盖安装静态语义齐备".into())
+    } else {
+        Err(format!("覆盖安装必要条件缺失: {}", missing.join("; ")))
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -119,5 +210,15 @@ mod tests {
     #[test]
     fn tauri_has_no_inline_version() {
         assert_eq!(read_tauri_version(), None);
+    }
+
+    #[test]
+    fn version_code_is_read_as_positive_integer() {
+        assert_eq!(read_version_code(), Some(1));
+    }
+
+    #[test]
+    fn apk_upgrade_check_passes_on_real_workspace() {
+        assert_eq!(apk_upgrade_check().outcome, super::super::Outcome::Pass);
     }
 }
