@@ -6,6 +6,7 @@ pub mod sync;
 pub mod net;
 pub mod stream;
 pub mod alarms;
+pub mod photo;
 pub mod transfer;
 
 use thiserror::Error;
