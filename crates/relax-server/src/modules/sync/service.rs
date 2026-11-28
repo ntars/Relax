@@ -245,21 +245,32 @@ fn collect_changes(
     watermark: &str,
     limit: usize,
 ) -> Result<Vec<Change>, SyncError> {
+    // applied_ops 为多模块共享表：chat 写入的是 MessageResult，不含 change 字段。
+    // sync pull 只返回同步引擎自己 push 的变更，跳过其他来源的幂等记录。
     let sql = "SELECT result_json FROM applied_ops WHERE applied_at > ?1 \
-               ORDER BY applied_at ASC LIMIT ?2";
+               ORDER BY applied_at ASC";
     let mut stmt = conn.prepare(sql).map_err(|_| SyncError::DbError)?;
     let rows = stmt
-        .query_map(params![watermark, limit as i64], |r| r.get::<_, String>(0))
+        .query_map(params![watermark], |r| r.get::<_, String>(0))
         .map_err(|_| SyncError::DbError)?;
     let mut changes = Vec::new();
     for row in rows {
         let raw = row.map_err(|_| SyncError::DbError)?;
-        let envelope: serde_json::Value =
-            serde_json::from_str(&raw).map_err(|_| SyncError::DbError)?;
-        let change: Change =
-            serde_json::from_value(envelope.get("change").cloned().unwrap_or(serde_json::Value::Null))
-                .map_err(|_| SyncError::DbError)?;
+        let envelope: serde_json::Value = match serde_json::from_str(&raw) {
+            Ok(v) => v,
+            Err(_) => continue,
+        };
+        let Some(change_val) = envelope.get("change") else {
+            continue;
+        };
+        let change: Change = match serde_json::from_value(change_val.clone()) {
+            Ok(c) => c,
+            Err(_) => continue,
+        };
         changes.push(change);
+        if changes.len() >= limit {
+            break;
+        }
     }
     Ok(changes)
 }
