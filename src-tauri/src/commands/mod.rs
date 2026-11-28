@@ -1,8 +1,10 @@
+mod announcements;
 mod auth;
 mod chat;
 mod login;
 mod sync;
 
+pub use announcements::*;
 pub use auth::*;
 pub use chat::*;
 

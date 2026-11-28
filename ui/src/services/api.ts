@@ -97,3 +97,41 @@ export async function outboxList(): Promise<unknown> {
 export async function retryOp(opId: string): Promise<void> {
     await invoke('retry_op', { opId });
 }
+
+// ---- 公告屏（C4.1）：list / markRead / publish / downloadAttachment ----
+
+export interface AnnouncementItem {
+    id: string;
+    title: string;
+    body: string;
+    pinned: boolean;
+    read: boolean;
+    attachmentIds: string[];
+}
+
+/** 拉取公告列表 + 未读角标数：走 Rust announcement_list 命令。 */
+export async function announcementList(): Promise<{
+    items: AnnouncementItem[];
+    unreadCount: number;
+}> {
+    return invoke('announcement_list');
+}
+
+/** 标记公告已读：走 Rust announcement_mark_read 命令。 */
+export async function announcementMarkRead(id: string): Promise<void> {
+    await invoke('announcement_mark_read', { id });
+}
+
+/** 发布公告（OWNER/ADMIN）：走 Rust announcement_publish 命令。 */
+export async function announcementPublish(
+    title: string,
+    body: string,
+    mentions: string[],
+): Promise<void> {
+    await invoke('announcement_publish', { title, body, mentions });
+}
+
+/** 下载附件：走 Rust announcement_download_attachment 命令。 */
+export async function announcementDownloadAttachment(attachmentId: string): Promise<void> {
+    await invoke('announcement_download_attachment', { attachmentId });
+}

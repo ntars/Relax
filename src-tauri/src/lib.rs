@@ -22,6 +22,10 @@ pub fn run() {
             commands::sync_data,
             commands::outbox_list,
             commands::retry_op,
+            commands::announcement_list,
+            commands::announcement_mark_read,
+            commands::announcement_publish,
+            commands::announcement_download_attachment,
         ])
         .run(tauri::generate_context!())
         .expect("error while running relax application");
