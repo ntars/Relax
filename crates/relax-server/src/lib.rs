@@ -7,6 +7,7 @@ pub mod migrate;
 pub mod cert;
 pub mod common;
 pub mod app;
+pub mod auth;
 
 pub use state::{AppState, AppInfo};
 pub use app::app;
