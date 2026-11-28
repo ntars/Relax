@@ -171,3 +171,34 @@ export async function newsRemoveFeed(id: string): Promise<void> {
 export async function newsMarkRead(id: string): Promise<void> {
     await invoke('news_mark_read', { id });
 }
+
+// ---- 作息屏（C4.3）：list / create ----
+
+export interface RoutineItem {
+    id: string;
+    title: string;
+    kind: string;
+    daysMask: number;
+    startMinute: number;
+    endMinute: number;
+    active: boolean;
+    isFamily: boolean;
+    overridesFamily: boolean;
+}
+
+/** 拉取作息列表（家庭+个人）：走 Rust routine_list 命令。 */
+export async function routineList(): Promise<{ family: RoutineItem[]; personal: RoutineItem[] }> {
+    return invoke('routine_list');
+}
+
+/** 新增作息（memberId=null 家庭，ADMIN+）：走 Rust routine_create 命令。 */
+export async function routineCreate(req: {
+    memberId: string | null;
+    title: string;
+    kind: string;
+    daysMask: number;
+    startMinute: number;
+    endMinute: number;
+}): Promise<void> {
+    await invoke('routine_create', { req });
+}
